@@ -28,7 +28,8 @@ export default function RootLayout({ children }) {
       <footer className="py-8 px-4 border-4" >
         <div className="max-w-6xl mx-auto flex justify-center items-center">
           <p className="text-stone-500 text-sm">
-            <Heart className="mr-2 h-5 w-5 text-red-500 fill-red-500" />
+            Made with 
+            <Heart className="mr-2 h-5 w-5 text-red-500 fill-red-500" /> by Sumit Khera
           </p>
         </div>
       </footer>
