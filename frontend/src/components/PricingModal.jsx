@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Sparkles } from "lucide-react";
-import * as Dialog from "@radix-ui/react-dialog";
+// import * as RadixDialog from "@radix-ui/react-RadixDialog";
+import * as RadixDialog from "@radix-ui/react-dialog";
 
 
 export default function PricingModal({ subscriptionTier = "free", onUpgrade }) {
@@ -32,21 +33,21 @@ export default function PricingModal({ subscriptionTier = "free", onUpgrade }) {
       : "bg-gray-100 text-gray-700";
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+    <RadixDialog.Root open={isOpen} onOpenChange={setIsOpen}>
       {/* Trigger */}
-      <Dialog.Trigger asChild>
+      <RadixDialog.Trigger asChild>
         <div className="cursor-pointer inline-flex items-center">
           <Badge className={`${badgeClass} flex items-center gap-1`}>
             <Sparkles className="h-3 w-3" />
             {subscriptionTier === "starter_plus" ? "Starter Plus" : "Free Plan"}
           </Badge>
         </div>
-      </Dialog.Trigger>
+      </RadixDialog.Trigger>
 
       {/* Modal */}
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+      <RadixDialog.Portal>
+        <RadixDialog.Overlay className="fixed inset-0 bg-black/40" />
+        <RadixDialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                                     bg-white rounded-lg p-6 w-80 shadow-lg animate-fade-in">
           <h2 className="text-lg font-semibold mb-2">Upgrade Your Plan</h2>
           <p className="text-sm text-gray-600 mb-4">
@@ -75,8 +76,8 @@ export default function PricingModal({ subscriptionTier = "free", onUpgrade }) {
           >
             Close
           </Button>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </RadixDialog.Content>
+      </RadixDialog.Portal>
+    </RadixDialog.Root>
   );
 }
