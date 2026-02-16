@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+// import {  useState } from "react";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/Button";
 
@@ -10,15 +10,29 @@ import { Badge } from "./ui/Badge";
 
 import { Cookie, Refrigerator, Sparkles } from "lucide-react";
 
-export default function Header() {
-    const [user, setUser] = useState(null);
+export default function Header({ user }) {
 
-    useEffect(() => {
-        fetch("/api/check-user")
-            .then((res) => res.json())
-            .then((data) => setUser(data.user))
-            .catch(console.error);
-    }, []);
+
+    console.log("USER SUBSCRIPTION CURRENT:", user.subscriptionTier);
+
+    // const [user, setUser] = useState(null);
+
+    // useEffect(() => {
+    //     fetch("/api/check-user")
+    //         .then((res) => res.json())
+    //         .then((data) => setUser(data.user))
+    //         .catch(console.error);
+    // }, []);
+    const handleUpgrade = async (newTier) => {
+        await fetch("/api/upgrade", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ newTier }),
+        });
+
+        // refresh page to refetch server user
+        window.location.reload();
+    };
 
     return (
         <header className="flex justify-between items-center p-4 border-b">
@@ -47,26 +61,41 @@ export default function Header() {
                 </SignedOut>
 
                 <SignedIn>
-                    {user?.subscriptionTier && (
-                        <PricingModal subscriptionTier={user.subscriptionTier}
-                        onUpgrade={(newTier) => setUser({ ...user, subscriptionTier: newTier })}>
-                            <Badge
-                                className={
-                                    user.subscriptionTier === "starter_plus"
-                                        ? "bg-gradient-to-r from-orange-600 to-amber-500 text-white"
-                                        : "bg-gray-100 text-gray-700"
-                                }
+                    {user && user.subscriptionTier && (
+                        <div className="flex items-center gap-3">
+
+                            <PricingModal
+                                subscriptionTier={user.subscriptionTier}
+                                onUpgrade={handleUpgrade}
                             >
-                                <Sparkles className="h-3 w-3 mr-1" />
-                                {user.subscriptionTier === "starter_plus"
-                                    ? "Starter Plus"
-                                    : "Free Plan"}
-                            </Badge>
-                        </PricingModal>
+                                <Badge
+                                    variant="outline"
+                                    className={`px-3 py-1 text-sm font-semibold rounded-full
+                                    ${user.subscriptionTier === "starter_plus"
+                                            ? "bg-gradient-to-r from-orange-600 to-amber-500 text-white border-none"
+                                            : "bg-gray-900 text-white border-none"
+                                        }`}
+                                >
+
+                                    <Sparkles className="h-4 w-4 mr-1" />
+
+                                    {user.subscriptionTier === "starter_plus"
+                                        ? "Starter Plus"
+                                        : "Free Plan"}
+                                </Badge>
+                            </PricingModal>
+
+                            {/* Debug fallback – remove later if you want */}
+                            {/* <span className="text-black font-bold">
+        {user.subscriptionTier}
+      </span> */}
+
+                        </div>
                     )}
 
                     <UserDropDown />
                 </SignedIn>
+
 
             </div>
 
