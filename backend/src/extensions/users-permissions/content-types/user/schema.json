@@ -93,8 +93,7 @@
       "type": "enumeration",
       "default": "free",
       "enum": [
-        "free",
-        "starter_plus"
+        "free"
       ]
     }
   }
