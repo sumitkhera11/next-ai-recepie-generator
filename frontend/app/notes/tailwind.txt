@@ -1,0 +1,2 @@
+line-clamp-3
+The Tailwind CSS line-clamp-3 utility class is used to limit a block of text to a maximum of three lines, automatically truncating any excess content and adding an ellipsis (...)

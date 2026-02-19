@@ -1,32 +1,26 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
-// ======================
-// Protected Routes
-// ======================
 const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
   "/recipe(.*)",
   "/recipes(.*)",
   "/pantry(.*)",
-  "/dashboard(.*)",
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  const { userId, redirectToSignIn } = auth();
-
-  // 🔹 Free Mode: only redirect if not signed in
-  if (!userId && isProtectedRoute(req)) {
-    return redirectToSignIn(); // removed async/await & extra auth call
+  if (isProtectedRoute(req)) {
+    auth.protect();
   }
-
-  return NextResponse.next();
 });
-
+// for development
 export const config = {
-  matcher: [
-    // Skip Next.js internals & static files
-    "/((?!_next|.*\\..*).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
-  ],
-};
+  matcher: ["/(.*)"],
+}
+
+// for production
+// export const config = {
+//   matcher: [
+//     "/((?!_next|.*\\..*).*)",
+//     "/(api|trpc)(.*)",
+//   ],
+// };

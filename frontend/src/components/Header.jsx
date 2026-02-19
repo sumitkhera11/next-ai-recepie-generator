@@ -1,47 +1,82 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/Button";
+import { Cookie, Refrigerator, Sparkles } from "lucide-react";
 import UserDropDown from "./UserDropDown";
-import { Badge } from "./ui/Badge";
-import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function Header({ user }) {
-  return (
-    <header className="flex justify-between items-center p-4 border-b">
-      <div className="text-xl font-bold">Next AI Recipe</div>
+    return (
+        <header className="fixed top-0 w-full border-b border-stone-200 
+      bg-stone-50/80 backdrop-blur-md z-50 
+      supports-backdrop-filter:bg-stone-50/60">
 
-      <div className="flex gap-6">
-        <a href="/recipes" className="text-gray-600 hover:text-black">
-          Recipes
-        </a>
-        <a href="/dashboard" className="text-gray-600 hover:text-black">
-          Dashboard
-        </a>
-      </div>
+            <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
 
-      <div className="flex items-center gap-3">
-        <SignedOut>
-          <SignInButton mode="modal">
-            <Button variant="ghost">Sign In</Button>
-          </SignInButton>
+                {/* Logo */}
+                <Link href={user ? "/dashboard" : "/"}>
+                    <Image
+                        src="/orange-logo.png"
+                        alt="Recipion Logo"
+                        width={60}
+                        height={60}
+                        className="w-16"
+                        priority
+                    />
+                </Link>
 
-          <SignUpButton mode="modal">
-            <Button variant="primary">Get Started</Button>
-          </SignUpButton>
-        </SignedOut>
+                {/* Center Navigation */}
+                <div className="hidden md:flex gap-8 text-sm font-medium">
+                    <Link href="/recipes" className="hover:text-orange-600 transition-colors flex gap-1.5 items-center">
+                        <Cookie className="w-4 h-4" />
+                        Recipes
+                    </Link>
+                    <Link href="/pantry" className="hover:text-orange-600 transition-colors flex gap-1.5 items-center">
+                        <Refrigerator className="w-4 h-4" />
+                        My Pantry
+                    </Link>
+                </div>
 
-        <SignedIn>
-          {user && (
-            <Badge className="px-3 py-1 text-sm font-semibold rounded-full bg-gray-900 text-white border-none">
-              <Sparkles className="h-4 w-4 mr-1" />
-              Free Plan
-            </Badge>
-          )}
+                {/* Right Section */}
+                <div className="flex items-center gap-4">
 
-          <UserDropDown />
-        </SignedIn>
-      </div>
-    </header>
-  );
+                    <SignedOut>
+                        <SignInButton mode="modal">
+                            <Button variant="ghost">Sign In</Button>
+                        </SignInButton>
+
+                        <SignUpButton mode="modal">
+                            <Button variant="primary">Get Started</Button>
+                        </SignUpButton>
+                    </SignedOut>
+
+                    <SignedIn>
+                        {user && (
+                            <Badge
+                                className="hidden sm:inline-flex items-center
+                 px-4 py-1.5
+                 text-sm font-semibold
+                 rounded-full
+                 border border-orange-500/30
+                 bg-orange-50
+                 text-orange-600!
+                 backdrop-blur-sm"
+                            >
+                                <Sparkles className="h-4 w-4 mr-2 text-orange-500!" />
+                                Free Plan
+                            </Badge>
+                        )}
+
+                        <UserDropDown />
+                    </SignedIn>
+
+
+                </div>
+            </nav>
+        </header>
+    );
 }
+
