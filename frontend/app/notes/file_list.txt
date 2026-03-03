@@ -1,0 +1,27 @@
+Changed / Deleted Files
+
+frontend/app/api/check-user/route.js → deleted
+
+frontend/app/layout.js → modified   - done
+
+frontend/package.json → modified (Clerk / Stripe dependencies maybe)
+
+frontend/package-lock.json → modified
+
+frontend/proxy.js → modified  - done
+
+frontend/src/components/Header.jsx → modified  -- done 
+
+frontend/src/components/PricingModal.jsx → modified  - done
+
+frontend/src/lib/checkUserServer.js → modified  = done
+
+2️⃣ Untracked Files
+
+frontend/app/api/checkout/ → added (Stripe API code)
+
+frontend/src/lib/getUser.js → added
+
+============================================================================================
+branch -> free-mode-v1 -> proxy.js
+git-> billing-experiment -> proxy.js

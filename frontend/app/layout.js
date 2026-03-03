@@ -2,10 +2,12 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Heart } from "lucide-react";
 import Header from "@/components/Header";
-import { getUser } from "@/lib/getUser"; 
+import { auth } from "@clerk/nextjs/server";
+
 
 import {ClerkProvider} from "@clerk/nextjs"
 import { neobrutalism } from "@clerk/themes";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({subsets: ["latin"]});
 export const metadata = {
@@ -22,7 +24,7 @@ export const metadata = {
 // Return Strapi user
 
 export default async function RootLayout({ children }) {
-  const user = await getUser();
+  const {userId} = auth();
   // console.log("LAYOUT USER:", user);
 
   return (
@@ -32,8 +34,9 @@ export default async function RootLayout({ children }) {
       <body
         className={`${inter.className}`}
       > 
-      <Header user={user} />
+      <Header userId={userId} />
       <main className="min-h-screen">
+        <Toaster richColors/>
         {children}
       </main>
       <footer className="py-8 px-4 border-4" >

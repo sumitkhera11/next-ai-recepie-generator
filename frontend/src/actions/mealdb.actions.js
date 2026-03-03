@@ -1,5 +1,6 @@
 "use server"
 
+// api fetch data
 const MEALDB_BASE = "http://www.themealdb.com/api/json/v1/1"
 // const MEALDB_BASE = "http://www.themealdb.com/api/json/v1/1/random.php"
 // https://www.themealdb.com/api/json/v1/1/categories.php
@@ -81,14 +82,17 @@ export async function getAreas() {
     }
 }
 export async function getMealsByCategory(category) {
+    
     try {
         const response = await fetch(`${MEALDB_BASE}/filter.php?c=${category}`, {
             cache: "no-store", // Cache for 24 hours
         });
+        
         if (!response.ok) {
             throw new Error("Failed to fetch meals");
         }
-        const data = response.json()
+        const data = await response.json()
+
         return {
             success: true,
             meals: data.meals || [],
@@ -97,8 +101,33 @@ export async function getMealsByCategory(category) {
     } catch (error) {
         console.error("Error fetching meals by category:", error);
         throw new Error(error.message || "Failed to load meals by category")
+        
     }
 }
+export async function getMealsByCuisine (cuisine) {
+    
+    try {
+        const response = await fetch(`${MEALDB_BASE}/filter.php?a=${cuisine}`, {
+            cache: "no-store", // Cache for 24 hours
+        });
+        
+        if (!response.ok) {
+            throw new Error("Failed to fetch cuisine");
+        }
+        const data = await response.json()
+
+        return {
+            success: true,
+            meals: data.meals || [],
+            cuisine
+        }
+    } catch (error) {
+        console.error("Error fetching meals by cuisine:", error);
+        throw new Error(error.message || "Failed to load meals by cuisine")
+        
+    }
+}
+
 export async function getMealsByArea(area) {
     try {
         const response = await fetch(`${MEALDB_BASE}/filter.php?a=${area}`, {
@@ -117,4 +146,27 @@ export async function getMealsByArea(area) {
         console.error("Error fetching meals by area:", error);
         throw new Error(error.message || "Failed to load meals by area")
     }
+}
+
+export async function getMealById(id) {
+  try {
+    const response = await fetch(
+      `${MEALDB_BASE}/lookup.php?i=${id}`,
+      { cache: "no-store" }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch recipe by id");
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      meal: data.meals?.[0] || null,
+    };
+  } catch (error) {
+    console.error("Error fetching meal by id:", error);
+    throw new Error("Failed to load recipe details");
+  }
 }

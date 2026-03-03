@@ -1,0 +1,43 @@
+frontend\src\components\RecipeUI.jsx
+
+frontend\app\(main)\recipes\[slug]\page.jsx-
+	RecipeDetailPage(){
+		const recipe = await getOrGenerateRecipe(slug);
+		return <RecipeUI recipe={recipe} />;
+	}
+
+
+frontend\src\actions\recipe.actions.js-
+	getOrGenerateRecipe(){
+		const recipe = await getRecipeBySlug(slug);
+	}
+
+frontend\src\lib\strapi.js
+	getRecipeBySlug(slug) {
+
+	}
+	createRecipe(recipeData) {
+
+	}
+frontend\app\api\recipes\route.js
+
+frontend\src\actions\usage.actions.js
+
+	checkRecipeUsage(){
+
+	}
+	incrementRecipeUsage(){
+	}
+
+
+1.RecipeDetailPage->getOrGenerateRecipe->getRecipeBySlug->api/recipes->(getRecipeBySlug,generateRecipe->createRecipe,checkRecipeUsage,incrementRecipeUsage)
+	a)getRecipeBySlug
+	b)generateRecipe
+	c)createRecipe
+	d)incrementRecipeUsage
+
+
+flow
+recipe
+route.js -> checkUsage -> generateRecipe -> incrementUsage
+

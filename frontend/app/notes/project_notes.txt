@@ -1,0 +1,45 @@
+Clean SaaS Architecture You Now Have
+API Route → Usage Check → AI Layer → Return Response
+
+AI layer doesn’t know about:
+
+User
+
+Usage
+
+Limits
+
+Database
+
+Perfect separation.
+
+-----------------
+saved_recipe
+Relationship Diagram
+User
+  ↓
+SavedRecipes (junction table)
+  ↓
+Recipe
+
+This allows:
+One user → many saved recipes
+One recipe → saved by many users
+No duplication
+Clean analytics
+
+saved_recipes
+- user (relation)
+- recipe (relation)
+
+Saved Recipe
+
+User A saved Butter Chicken
+User B saved Butter Chicken
+
+You don’t duplicate Butter Chicken.
+You just store:
+
+user	recipe
+7	    12
+9	    12

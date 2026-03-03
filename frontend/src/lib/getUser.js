@@ -1,5 +1,5 @@
-import { checkUserServer } from "@/lib/checkUserServer";
+// import { checkUserServer } from "@/lib/checkUserServer";
 
-export async function getUser() {
-  return await checkUserServer();
-}
+// export async function getUser() {
+//   return await checkUserServer();
+// }

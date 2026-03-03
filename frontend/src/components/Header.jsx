@@ -8,7 +8,7 @@ import UserDropDown from "./UserDropDown";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export default function Header({ user }) {
+export default function Header({ userId }) {
     return (
         <header className="fixed top-0 w-full border-b border-stone-200 
       bg-stone-50/80 backdrop-blur-md z-50 
@@ -17,7 +17,7 @@ export default function Header({ user }) {
             <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
 
                 {/* Logo */}
-                <Link href={user ? "/dashboard" : "/"}>
+                <Link href={userId ? "/dashboard" : "/"}>
                     <Image
                         src="/orange-logo.png"
                         alt="Recipion Logo"
@@ -54,7 +54,7 @@ export default function Header({ user }) {
                     </SignedOut>
 
                     <SignedIn>
-                        {user && (
+                        {userId && (
                             <Badge
                                 className="hidden sm:inline-flex items-center
                  px-4 py-1.5

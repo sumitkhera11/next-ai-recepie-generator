@@ -1,0 +1,184 @@
+Main tumhe unique slugs + matching human-readable titles de raha hoon.
+Ye sab realistic food names hain — testing ke liye perfect.
+
+🥐 1
+
+Title: Smoky Garlic Butter Chicken
+Slug: smoky-garlic-butter-chicken
+
+🍚 2
+
+Title: Coconut Lime Rice Bowl
+Slug: coconut-lime-rice-bowl
+
+🍜 3
+
+Title: Spicy Thai Peanut Noodles
+Slug: spicy-thai-peanut-noodles
+
+🥗 4
+
+Title: Mediterranean Chickpea Salad
+Slug: mediterranean-chickpea-salad
+
+🍝 5
+
+Title: Creamy Mushroom Alfredo Pasta
+Slug: creamy-mushroom-alfredo-pasta
+
+🌮 6
+
+Title: Loaded Veggie Breakfast Tacos
+Slug: loaded-veggie-breakfast-tacos
+
+🍛 7
+
+Title: Classic Indian Butter Paneer
+Slug: classic-indian-butter-paneer
+
+🍲 8
+
+Title: Hearty Tomato Basil Soup
+Slug: hearty-tomato-basil-soup
+
+🍤 9
+
+Title: Crispy Honey Garlic Shrimp
+Slug: crispy-honey-garlic-shrimp
+
+🥘 10
+
+Title: One Pot Lemon Herb Chicken
+Slug: one-pot-lemon-herb-chicken
+
+🍰 11
+
+Title: Dark Chocolate Lava Cake
+Slug: dark-chocolate-lava-cake
+
+🥞 12
+
+Title: Fluffy Banana Oat Pancakes
+Slug: fluffy-banana-oat-pancakes
+
+🥙 13
+
+Title: Middle Eastern Falafel Wrap
+Slug: middle-eastern-falafel-wrap
+
+🍗 14
+
+Title: Sticky Teriyaki Glazed Wings
+Slug: sticky-teriyaki-glazed-wings
+
+🥪 15
+
+Title: Grilled Cheese with Caramelized Onions
+Slug: grilled-cheese-with-caramelized-onions
+
+🔥 Bonus: Edge Case Testing Slugs
+
+Testing ke liye thoda tricky bhi use karo:
+
+With numbers
+
+Title: 5 Minute Mug Cake
+Slug: 5-minute-mug-cake
+
+With long title
+
+Title: Slow Cooked Spiced Pumpkin Coconut Curry
+Slug: slow-cooked-spiced-pumpkin-coconut-curry
+
+With special character (should be cleaned)
+
+Title: Grandma’s Special Apple Pie
+Slug: grandmas-special-apple-pie
+---------------------------
+🍳 Breakfast
+
+Slug: spiced-apple-walnut-oatmeal-bowl
+Title: Spiced Apple Walnut Oatmeal Bowl
+
+Slug: savory-spinach-feta-breakfast-wrap
+Title: Savory Spinach & Feta Breakfast Wrap
+
+Slug: cinnamon-maple-french-toast-bites
+Title: Cinnamon Maple French Toast Bites
+
+Slug: avocado-chickpea-smash-toast
+Title: Avocado Chickpea Smash Toast
+
+🍝 Lunch
+
+Slug: zesty-lemon-herb-quinoa-salad
+Title: Zesty Lemon Herb Quinoa Salad
+
+Slug: creamy-roasted-red-pepper-pasta
+Title: Creamy Roasted Red Pepper Pasta
+
+Slug: smoky-black-bean-stuffed-peppers
+Title: Smoky Black Bean Stuffed Peppers
+
+Slug: mediterranean-grilled-veggie-pita
+Title: Mediterranean Grilled Veggie Pita
+
+🍛 Dinner
+
+Slug: garlic-butter-chicken-with-herb-rice
+Title: Garlic Butter Chicken with Herb Rice
+
+Slug: coconut-lime-shrimp-curry
+Title: Coconut Lime Shrimp Curry
+
+Slug: baked-eggplant-parmesan-stack
+Title: Baked Eggplant Parmesan Stack
+
+Slug: teriyaki-glazed-salmon-bowl
+Title: Teriyaki Glazed Salmon Bowl
+
+🍰 Dessert
+
+Slug: dark-chocolate-orange-mousse
+Title: Dark Chocolate Orange Mousse
+
+Slug: no-bake-peanut-butter-cheesecake-cups
+Title: No-Bake Peanut Butter Cheesecake Cups
+
+Slug: berry-almond-crumble-bars
+Title: Berry Almond Crumble Bars
+
+Slug: vanilla-cardamom-rice-pudding
+Title: Vanilla Cardamom Rice Pudding
+
+🥗 Snack / Light
+
+Slug: crispy-parmesan-zucchini-chips
+Title: Crispy Parmesan Zucchini Chips
+
+Slug: spicy-roasted-chickpea-mix
+Title: Spicy Roasted Chickpea Mix
+
+Slug: honey-lime-fruit-salad
+Title: Honey Lime Fruit Salad
+
+Slug: cheesy-garlic-pull-apart-bread
+Title: Cheesy Garlic Pull-Apart Bread
+
+Agar chaho toh main:
+
+🔥 Indian-only slug batch
+
+🥑 Vegan/healthy slug batch
+
+🍗 High-protein meal prep batch
+
+🍕 Trending restaurant-style slug batch
+
+📈 High SEO keyword optimized slug batch
+
+smoky-chili-garlic-noodle-bowl-xt92q
+roasted-coconut-lime-lentil-stew-b7k4m
+crispy-honey-sesame-tofu-wrap-zp81x
+creamy-spinach-mushroom-pasta-r9v3n
+spicy-peanut-crunch-salad-lx6tq

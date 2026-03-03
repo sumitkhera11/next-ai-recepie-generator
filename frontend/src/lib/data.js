@@ -111,7 +111,7 @@ export function getCountryFlag(country) {
     Argentinian: "⚽",
     Australian: "🦘",
     Norwegian: "❄️",
-    "Saudi Arabian": "🕋",
+    SaudiArabian: "🕋",
     Slovakian: "🏔️",
     Syrian: "🏛️",
     Uruguayan: "⚽",
