@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState,useEffect  } from "react";
 import Link from 'next/link'
 import {
     ArrowLeft,
@@ -26,22 +26,52 @@ import {
     removeRecipeFromCollection,
 } from "@/actions/recipe.actions";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function RecipeUI({ recipe, backLink }) {
+export default function RecipeUI({ recipe,fallback = "/dashboard"  }) {
     const [checkedIngredients, setCheckedIngredients] = useState([]);
     const [isSaved, setIsSaved] = useState(recipe?.isSaved || false);
+    const router = useRouter()
 
-
+    const handleBack = () => {
+        if (window.history.length > 1) {
+            router.back();
+        } else {
+            router.push(fallback);
+        }
+    };
     // 🔥 useFetch hooks
     const {
         loading: saving,
+        data: saveData,
         fn: saveToCollection,
     } = useFetch(saveRecipeToCollection);
 
     const {
         loading: removing,
+        data: removeData,
         fn: removeFromCollection,
     } = useFetch(removeRecipeFromCollection);
+
+    //handle save effect
+    useEffect(() => {
+        if (saveData?.success) {
+            if (saveData.alreadySaved) {
+                toast.info("Recipe is already in your collection")
+            } else {
+                setIsSaved(true)
+                toast.info("Recipe saved to your collection!")
+            }
+        }
+    }, [saveData])
+
+    // handle remove data
+    useEffect(() => {
+        if (removeData?.success) {
+            setIsSaved(false)
+            toast.info("Recipe removed from collection!");
+        }
+    }, [removeData])
 
     // Toggle Save
     const handleToggleSave = async () => {
@@ -70,9 +100,6 @@ export default function RecipeUI({ recipe, backLink }) {
             }
         }
     };
-
-
-
     // 🔥 SAFE DESCRIPTION EXTRACTOR (no crash if string comes)
     //   Strapi Rich Text store karta hai data structured form me.
     // Frontend ko plain string chahiye hoti hai.
@@ -149,13 +176,13 @@ export default function RecipeUI({ recipe, backLink }) {
                 {/* Back */}
                 <div className="mb-6">
                     <p>Recipe ID: {recipe.id}</p>
-                    <Link
-                        href={backLink ?? "/dashboard"}
+                    <button
+                        onClick={handleBack}
                         className="inline-flex items-center gap-2 text-stone-600 hover:text-orange-600 transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back to Dashboard
-                    </Link>
+                    </button>
                 </div>
 
                 {/* HERO */}

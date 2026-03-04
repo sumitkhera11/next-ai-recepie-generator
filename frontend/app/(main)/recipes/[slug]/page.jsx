@@ -13,6 +13,6 @@ export default async function RecipeDetailPage({ params }) {
 
     return <RecipeUI 
         recipe={recipe}
-        backLink="/dashboard"
+        fallback="/generate" 
          />;
 }
