@@ -6,8 +6,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'
 import { getCategoryEmoji, getCountryFlag } from '@/lib/data';
+import { checkUserServer } from "@/lib/checkUserServer";
 
 const Dashboard = async () => {
+  const user = await checkUserServer();
+  if (!user) {
+    redirect("/")
+  }
   const recipeData = await getRecipeOfTheDay()
   // console.log("DASHBOARD: ",recipeData?.recipe.strArea)
   const categoriesData = await getCategories()
@@ -76,9 +81,13 @@ const Dashboard = async () => {
                     <p className='text-stone-600 mb-6 line-clamp-3 font-light text-lg'>
                       {recipeOfTheDay.strInstructions?.substring(0, 200)}...
                     </p>
-                    <Button variant="primary" size="lg">
-                      Start Cooking<ArrowRight className='w-5 h-5 ml-2' />
-                    </Button>
+                    <Link href={`/recipes/${recipeOfTheDay.slug}`}>
+                      <Button variant="primary" size="lg">
+                        Start Cooking
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Link>
+
                   </div>
                 </div>
               </div>

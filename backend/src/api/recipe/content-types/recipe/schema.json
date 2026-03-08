@@ -93,7 +93,7 @@
     "tips": {
       "type": "json"
     },
-    "subsitutions": {
+    "substitutions": {
       "type": "json"
     },
     "saved_recipes": {
@@ -101,6 +101,11 @@
       "relation": "oneToMany",
       "target": "api::saved-recipe.saved-recipe",
       "mappedBy": "recipe"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
     }
   }
 }

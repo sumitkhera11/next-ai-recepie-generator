@@ -1,18 +1,26 @@
-import { getOrGenerateRecipe } from "@/actions/recipe.actions";
+// import { getOrGenerateRecipe } from "@/actions/recipe.actions";
 import RecipeUI from "@/components/RecipeUI";
+import { getRecipeBySlug } from "@/lib/strapi";
 
 export default async function RecipeDetailPage({ params }) {
     const { slug } = await params;
 
-    const recipe = await getOrGenerateRecipe(slug);
-    console.log("GET_OR_GENERATE_RECIPE:", recipe)
+    // const recipe = await getOrGenerateRecipe(slug);
+    // console.log("GET_OR_GENERATE_RECIPE:", recipe)
+    // 🔥 ONLY DB CHECK
+    const recipe = await getRecipeBySlug(slug);
+    console.log("RECIPE_OBJECT:", recipe);
 
     if (!recipe) {
-        return <div style={{backgroundColor:"blue", marginTop:50, color:"white"}}>Recipe not found</div>;
+        return <div style={{ backgroundColor: "blue", marginTop: 50, color: "white" }}>Recipe not found</div>;
     }
 
-    return <RecipeUI 
-        recipe={recipe}
-        fallback="/generate" 
-         />;
+    return (
+        <>
+            <RecipeUI
+                recipe={recipe}
+                fallback="/dashboard"
+            />
+        </>
+    )
 }

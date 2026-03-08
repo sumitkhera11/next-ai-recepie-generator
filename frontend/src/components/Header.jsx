@@ -69,6 +69,24 @@ export default function Header({ userId }) {
                                 Free Plan
                             </Badge>
                         )}
+<Link href="/generate">
+<Button
+className="
+bg-orange-600
+hover:bg-orange-700
+text-white
+px-4
+py-2
+rounded-lg
+hidden md:flex
+items-center
+gap-2
+"
+>
+<Sparkles className="w-4 h-4"/>
+Generate
+</Button>
+</Link>
 
                         <UserDropDown />
                     </SignedIn>

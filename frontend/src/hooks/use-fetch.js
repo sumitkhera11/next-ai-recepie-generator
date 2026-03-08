@@ -15,6 +15,7 @@ const useFetch = (cb) => {
 // ✔ Stable dependency for useEffect
   const fn = useCallback(
     async (...args) => {
+      console.log("USE_FETCH_FN_CALLED", args);
       setLoading(true);
       setError(null);
 

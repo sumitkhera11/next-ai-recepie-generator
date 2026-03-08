@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 // import { Card } from "@/components/ui/card"
 import Image from 'next/image'
+import { Cookie, Refrigerator, Sparkles } from "lucide-react";
 
 
 export default function Home() {
@@ -39,16 +40,43 @@ export default function Home() {
 
 
             <p className="text-xl md:text-2xl text-stone-600 max-w-lg font-light">
-              Snap a photo of your fridge. We&apos;ll tell you what to cook.
+              Upload ingredients or type a dish name
+              AI will generate a complete recipe instantly.
+              We&apos;ll tell you what to cook.
               Save money, reduce waste and eat better tonight.
             </p>
-            <Link href={"/dashboard"}>
-              <Button variant="primary" size="lg">
-                Start Cooking Free
-                <ArrowBigRight className="ml-2 w-5 h-5" />
+            <Link href="/generate">
+              <Button
+                size="lg"
+                className="
+      bg-orange-600 
+      hover:bg-orange-700 
+      text-white 
+      px-8 
+      py-6
+      text-lg
+      font-semibold
+      rounded-xl
+      shadow-lg
+      hover:shadow-xl
+      transition-all
+      flex items-center
+    "
+              >
+                Generate Recipe with AI
+                <Sparkles className="ml-2 w-5 h-5" />
               </Button>
-
             </Link>
+            <Link href="/recipes">
+              <Button
+                variant="outline"
+                size="lg"
+                className="px-8 py-6 text-lg rounded-xl"
+              >
+                Browse Recipes
+              </Button>
+            </Link>
+
             <p className="mt-2 text-sm text-stone-500 ">
               <span className="font-bold text-stone-900">10k+ cooks</span>{" "}
               joined last month
@@ -175,38 +203,59 @@ export default function Home() {
 
       </section>
       <section className="py-24 px-4 border-y-2 border-stone-200 bg-stone-900 text-stone-50">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-5xl md:text-6xl font-bold mb-16">
-                Cook in 3 Steps
-              </h2>
-              <div className="space-y-12">
-                {HOW_IT_WORKS_STEPS.map((item,i) => {
-                  return (
-                    <div key={i}>
-                      <div className="flex gap-6 items-start">
-                        <Badge
-                          variant="outline"
-                          className="text-6xl font-bold text-orange-500 border-none bg-transparent p-0 h-auto">
-                              {item.step}
-                        </Badge>
-                        <div>
-                          <h3 className="text-2xl font-bold mb-3">
-                              {item.title}
-                          </h3>
-                          <p className="text-lg text-stone-400 font-light">
-                              {item.desc}
-                          </p>
-                        </div>
-                      </div>
-                        {i < HOW_IT_WORKS_STEPS.length -1 && (
-                          <hr className="my-8 bg-stone-700"/>
-                        )}
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-5xl md:text-6xl font-bold mb-16">
+            Cook in 3 Steps
+          </h2>
+          <div className="space-y-12">
+            {HOW_IT_WORKS_STEPS.map((item, i) => {
+              return (
+                <div key={i}>
+                  <div className="flex gap-6 items-start">
+                    <Badge
+                      variant="outline"
+                      className="text-6xl font-bold text-orange-500 border-none bg-transparent p-0 h-auto">
+                      {item.step}
+                    </Badge>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-3">
+                        {item.title}
+                      </h3>
+                      <p className="text-lg text-stone-400 font-light">
+                        {item.desc}
+                      </p>
                     </div>
-                  )
-                })}
-              </div>
-            </div>
+                  </div>
+                  {i < HOW_IT_WORKS_STEPS.length - 1 && (
+                    <hr className="my-8 bg-stone-700" />
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </section>
+      <section className="py-24 text-center bg-orange-50">
+
+<h2 className="text-4xl font-bold mb-6">
+Ready to cook something amazing?
+</h2>
+
+<p className="text-lg text-stone-600 mb-8">
+Let AI turn your ingredients into delicious meals.
+</p>
+
+<Link href="/generate">
+<Button
+size="lg"
+className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-6 text-lg rounded-xl shadow-lg"
+>
+Generate Your Recipe Now
+</Button>
+</Link>
+
+</section>
+
     </div>
   );
 }

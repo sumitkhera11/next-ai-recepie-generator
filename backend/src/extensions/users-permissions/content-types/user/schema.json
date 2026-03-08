@@ -95,6 +95,15 @@
       "enum": [
         "free"
       ]
+    },
+    "dailyRecipeUsage": {
+      "type": "integer"
+    },
+    "dailyScanUsage": {
+      "type": "integer"
+    },
+    "lastUsageDate": {
+      "type": "date"
     }
   }
 }

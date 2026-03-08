@@ -1,61 +1,89 @@
-import { Camera, BookOpen, ChefHat, Search } from "lucide-react";
+// ===============================
+// Homepage Stats
+// ===============================
 
 export const SITE_STATS = [
-  { label: "Free Scans", val: "10/mo" },
-  { label: "Recipes Generated", val: "1M+" },
-  { label: "Cost to Start", val: "$0" },
-  { label: "App Store Rating", val: "4.9" },
+  {
+    label: "Recipes Generated",
+    value: "25K+",
+  },
+  {
+    label: "Active Users",
+    value: "8K+",
+  },
+  {
+    label: "Cuisines Covered",
+    value: "120+",
+  },
+  {
+    label: "AI Generations",
+    value: "50K+",
+  },
 ];
+
+
+// ===============================
+// Features Section
+// ===============================
 
 export const FEATURES = [
   {
-    title: "Scan Your Pantry",
+    icon: "Sparkles",
+    title: "AI Recipe Generation",
     description:
-      "Photo recognition that actually works. Know what you have instantly.",
-    icon: Camera,
-    limit: "10 scans/mo free",
+      "Generate complete recipes instantly using AI. Just type ingredients or a dish name and get cooking instructions.",
   },
   {
-    title: "AI Chef Suggestions",
+    icon: "Clock",
+    title: "Save Time Cooking",
     description:
-      "Turn random ingredients into a gourmet meal. Zero food waste.",
-    icon: ChefHat,
-    limit: "5 meals/mo free",
+      "Discover quick and delicious meals without spending hours searching for recipes online.",
   },
   {
-    title: "Search Any Dish",
+    icon: "Flame",
+    title: "Trending Recipes",
     description:
-      "Find any recipe instantly. Filter by cuisine, time, or dietary needs.",
-    icon: Search,
-    limit: "Unlimited searches",
+      "Explore the most popular recipes people are cooking right now from cuisines around the world.",
   },
   {
-    title: "Digital Cookbook",
-    description: "Save your favorites. Export as PDF. Share with family.",
-    icon: BookOpen,
-    limit: "3 saves/mo free",
+    icon: "Star",
+    title: "Save Your Favorites",
+    description:
+      "Bookmark and organize your favorite recipes so you can cook them anytime.",
   },
 ];
+
+
+// ===============================
+// How It Works Section
+// ===============================
 
 export const HOW_IT_WORKS_STEPS = [
   {
     step: "01",
-    title: "Scan",
-    desc: "Point camera at fridge. AI identifies ingredients.",
+    title: "Enter Dish or Ingredients",
+    description:
+      "Type any recipe name or ingredients you have available in your kitchen.",
   },
   {
     step: "02",
-    title: "Select",
-    desc: "Choose a generated recipe based on your mood.",
+    title: "AI Generates Recipe",
+    description:
+      "Our AI creates a complete recipe including ingredients, steps, cooking time and tips.",
   },
   {
     step: "03",
-    title: "Savor",
-    desc: "Follow simple steps. Eat delicious food.",
+    title: "Cook & Enjoy",
+    description:
+      "Follow the instructions and cook delicious meals instantly at home.",
   },
 ];
 
-// Helper function for category emojis
+
+// ===============================
+// Helper function for category emoji
+// ===============================
+
 export function getCategoryEmoji(category) {
   const emojiMap = {
     Beef: "🥩",
@@ -73,10 +101,15 @@ export function getCategoryEmoji(category) {
     Breakfast: "🍳",
     Goat: "🐐",
   };
+
   return emojiMap[category] || "🍽️";
 }
 
+
+// ===============================
 // Helper function for country flags
+// ===============================
+
 export function getCountryFlag(country) {
   const emojiMap = {
     American: "🗽",

@@ -49,7 +49,11 @@ module.exports = ({ env }) => {
       useNullAsDefault: true,
     },
   };
-
+  console.log("DB CONFIG:", {
+    client: env('DATABASE_CLIENT'),
+    host: env('DATABASE_HOST'),
+    database: env('DATABASE_NAME'),
+  });
   return {
     connection: {
       client,

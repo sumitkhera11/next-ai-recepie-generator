@@ -570,7 +570,8 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
       'api::saved-recipe.saved-recipe'
     >;
     servings: Schema.Attribute.Integer;
-    subsitutions: Schema.Attribute.JSON;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    substitutions: Schema.Attribute.JSON;
     tips: Schema.Attribute.JSON;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -1079,11 +1080,14 @@ export interface PluginUsersPermissionsUser
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    dailyRecipeUsage: Schema.Attribute.Integer;
+    dailyScanUsage: Schema.Attribute.Integer;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    lastUsageDate: Schema.Attribute.Date;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

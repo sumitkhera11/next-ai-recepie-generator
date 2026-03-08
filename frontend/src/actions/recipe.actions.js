@@ -1,18 +1,20 @@
 "use server";
 import { checkUserServer } from "@/lib/checkUserServer";
+import { redirect } from "next/navigation"
 
-const STRAPI_URL = process.env.STRAPI_URL;
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
-console.log("🚀 STRAPI_URL_BEING_USED_recipe_action:", STRAPI_URL);
-console.log("STRAPI_URL_2:", process.env.STRAPI_URL);
-// server actions
+
 export async function getOrGenerateRecipe(slug) {
+    const user = await checkUserServer();
+    if (!user) {
+        redirect("/")
+    }
+
     try {
         if (!slug) {
             throw new Error("Recipe name is required");
         }
         const res = await fetch("http://localhost:3000/api/recipes", {
-            
+
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +30,7 @@ export async function getOrGenerateRecipe(slug) {
 
         const data = await res.json();
         console.log("DATA_RECIPE_ID:", data.recipe);
-        
+
         return data.recipe;
 
     } catch (error) {
@@ -50,7 +52,15 @@ export async function getOrGenerateRecipe(slug) {
 // Dono protected endpoints hain.
 // Dono me token required hai.
 export async function saveRecipeToCollection(recipeId) {
+    const user = await checkUserServer();
+    if (!user) {
+        redirect("/")
+    }
+
     try {
+        // console.log("RECIPE_SAVED_TO_COLLECTION:",recipeId);
+        console.log("SAVING_RECIPE_ID:", recipeId);
+
         // const user = await checkUserServer();
         if (!recipeId) {
             // if(!slug.get("slug")) {
@@ -60,7 +70,7 @@ export async function saveRecipeToCollection(recipeId) {
         // Check if already saved
         // Check existing
         const existingResponse = await fetch(
-            `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&filters[recipe][id][$eq]=${recipeId}`,
+            `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&filters[recipe][id][$eq]=${recipeId}&populate=*`,
             {
                 headers: {
                     Authorization: `Bearer ${STRAPI_API_TOKEN}`,
@@ -68,11 +78,11 @@ export async function saveRecipeToCollection(recipeId) {
                 cache: "no-store",
             }
         );
-        console.log('EXISTING_RESPONSE:',existingResponse);
-        
+        console.log('EXISTING_RESPONSE:', existingResponse);
+
         if (existingResponse.ok) {
             const existingData = await existingResponse.json();
-            if (existingData.data && existingData.data.length > 0) {
+            if (existingData.data?.length > 0) {
                 return {
                     success: true,
                     alreadySaved: true,
@@ -89,9 +99,9 @@ export async function saveRecipeToCollection(recipeId) {
             },
             body: JSON.stringify({
                 data: {
-                    user: user.id,
-                    recipe: recipeId,
                     savedat: new Date().toISOString(),
+                    user: user.id,
+                    recipe: recipeId
                 },
             }),
         });
@@ -101,6 +111,7 @@ export async function saveRecipeToCollection(recipeId) {
             throw new Error("Failed to save recipe to collection");
         }
         const savedRecipe = await saveResponse.json();
+        console.log("STRAPI_SAVE_RESPONSE:", savedRecipe);
         console.log("✅ Recipe saved to user collection:", savedRecipe.data.id);
 
         return {
@@ -118,7 +129,13 @@ export async function saveRecipeToCollection(recipeId) {
 
 // ` recipe from user's collection (unbookmark)
 export async function removeRecipeFromCollection(recipeId) {
+    const user = await checkUserServer();
+    if (!user) {
+        redirect("/")
+    }
+
     try {
+        console.log("RECIPE_REMOVE_FROM_COLLECTION:", recipeId);
         if (!recipeId) {
             throw new Error("Recipe ID is required");
         }

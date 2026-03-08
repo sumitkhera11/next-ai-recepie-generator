@@ -39,14 +39,82 @@ export default async function RootLayout({ children }) {
         <Toaster richColors/>
         {children}
       </main>
-      <footer className="py-8 px-4 border-4" >
-        <div className="max-w-6xl mx-auto flex justify-center items-center">
-          <p className="text-stone-500 text-sm">
-            Made with 
-            <Heart className="mr-2 h-5 w-5 text-red-500 fill-red-500" /> by Sumit Khera
-          </p>
-        </div>
-      </footer>
+      <footer className="mt-20 border-t border-gray-200 bg-stone-50">
+
+  <div className="max-w-6xl mx-auto px-6 py-10">
+
+    <div className="grid md:grid-cols-3 gap-8 items-center">
+
+      {/* Brand */}
+      <div>
+
+        <h2 className="text-xl font-bold text-gray-900">
+          AI Recipe Generator
+        </h2>
+
+        <p className="text-sm text-gray-600 mt-2">
+          Discover delicious recipes generated with AI.
+          Cook smarter, eat better.
+        </p>
+
+      </div>
+
+
+      {/* Links */}
+      <div className="flex justify-center gap-6 text-sm text-gray-600">
+
+        <a
+          href="/recipes"
+          className="hover:text-orange-600 transition"
+        >
+          Recipes
+        </a>
+
+        <a
+          href="/about"
+          className="hover:text-orange-600 transition"
+        >
+          About
+        </a>
+
+        <a
+          href="/privacy"
+          className="hover:text-orange-600 transition"
+        >
+          Privacy
+        </a>
+
+      </div>
+
+
+      {/* Credit */}
+      <div className="flex justify-end items-center text-sm text-stone-500">
+
+        <span>Made with</span>
+
+        <Heart className="mx-2 h-4 w-4 text-red-500 fill-red-500" />
+
+        <span className="font-medium">
+          Sumit Khera
+        </span>
+
+      </div>
+
+    </div>
+
+
+    {/* Bottom Line */}
+
+    <div className="border-t border-gray-200 mt-8 pt-6 text-center text-xs text-gray-500">
+
+      © {new Date().getFullYear()} AI Recipe Generator. All rights reserved.
+
+    </div>
+
+  </div>
+
+</footer>
+
       </body>
     </html>
     </ClerkProvider>

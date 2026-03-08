@@ -89,3 +89,27 @@ Create in Strapi
 Return recipe
  ↓
 Render page
+---------------
+FINAL_COMPLETE_ROADMAP
+Now flow becomes:
+
+/recipes/random-bad-url
+   ↓
+getRecipeBySlug (DB only)
+   ↓
+Not found
+   ↓
+404 page
+
+NO AI CALL.
+NO POST.
+NO USAGE COUNT.
+NO STRAPI CREATE.
+
+Cost protected.
+
+File	Role
+generateRecipe.js	AI brain
+route.js	Business manager
+recipe.actions.js	Connector
+generate/page.jsx	User button

@@ -1,22 +1,25 @@
 
 export async function getRecipeBySlug(slug) {
-  try {
-    const res = await fetch(
-      `${process.env.STRAPI_URL}/api/recipes?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`,
-      { cache: "no-store" }
-    );
+    try {
+        const res = await fetch(
+            `${process.env.STRAPI_URL}/api/recipes?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`,
+            { cache: "no-store" }
+        );
 
-    const data = await res.json();
+        if (!res.ok) {
+            console.error("Strapi response not ok:", res.status);
+            return null;
+        }
 
-    if (!data?.data || data.data.length === 0) {
-      return null;
+        const data = await res.json();
+        if (!data?.data || data.data.length === 0) {
+            return null;
+        }
+        return data.data[0];
+    } catch (error) {
+        console.error("Error fetching recipe:", error);
+        return null;
     }
-
-    return data.data[0];
-  } catch (error) {
-    console.error("Error fetching recipe:", error);
-    return null;
-  }
 }
 // export async function createRecipe(recipeData) {
 //     const res = await fetch(`${process.env.STRAPI_URL}/api/recipes`, {

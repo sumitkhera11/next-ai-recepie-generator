@@ -2,8 +2,14 @@ import { checkRecipeUsage, incrementRecipeUsage } from "@/actions/usage.actions"
 import { generateRecipe } from "@/lib/ai/generateRecipe";
 import { getRecipeBySlug, createRecipe } from "@/lib/strapi";
 import slugify from "slugify";
+import { fetchRecipeImage } from "@/lib/images/fetchRecipeImage";
 
+//main api route
 const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+
+console.log("STRAPI TOKEN:", STRAPI_API_TOKEN);
+
 console.log("🚀 STRAPI_URL_BEING_USED_route_js:", STRAPI_URL);
 
 export async function POST(req) {
@@ -116,6 +122,7 @@ ${schemaInstruction}
 
         // ✅ 5️⃣ Call AI (or dev mock)
         let aiRecipe;
+        let recipeImage = "";
         const isAIEnabled = process.env.AI_ENABLED === "true";
 
         if (!isAIEnabled) {
@@ -142,6 +149,9 @@ ${schemaInstruction}
             };
         } else {
             aiRecipe = await generateRecipe(finalPrompt);
+            // 🔥 Fetch image from Unsplash
+            recipeImage = await fetchRecipeImage(aiRecipe.title);
+
             console.log("RAW_AI_RECIPE_a:", aiRecipe);
         }
         if (!aiRecipe?.title) {
@@ -161,7 +171,8 @@ ${schemaInstruction}
         const formattedRecipe = normalizeRecipe(
             aiRecipe,
             generatedSlug,
-            user.id
+            user.id,
+            recipeImage
         );
 
         // ✅ 8️⃣ Save to Strapi
@@ -279,7 +290,7 @@ function toRichTextBlocks(text) {
     ];
 }
 
-function normalizeRecipe(aiRecipe, slug, userId) {
+function normalizeRecipe(aiRecipe, slug, userId,imageUrl) {
     const allowedCuisines = [
         "italian",
         "chinese",
@@ -346,7 +357,7 @@ function normalizeRecipe(aiRecipe, slug, userId) {
         nutrition: normalizeNutrition(aiRecipe.nutrition),
         tips: normalizeStringArray(aiRecipe.tips),
         substitutions: normalizeStringArray(aiRecipe.substitutions),
-        imageurl: getCuisineImage(cuisineValue),
+        imageurl: imageUrl || getCuisineImage(cuisineValue),
         isPublic: true,
         author: userId,
     };
