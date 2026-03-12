@@ -1,6 +1,6 @@
 import { checkScanUsage, incrementScanUsage } from "@/actions/pantry.actions";
 import { checkUserServer } from "@/lib/checkUserServer";
-import { scanPantryImage } from "@/lib/ai/scanPantryImage";
+import { scanPantryImage } from "@/actions/pantry.actions";
 // Better flow:
 // Check limit
 // Call Gemini
@@ -18,8 +18,7 @@ import { scanPantryImage } from "@/lib/ai/scanPantryImage";
 
 export async function POST(req) {
     try {
-        // const user = await checkUserServer();
-        const user = { id: 7 };
+        const user = await checkUserServer();
 
         if (!user) {
             return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -53,7 +52,7 @@ export async function POST(req) {
         }
 
         // 1️⃣ Check limit
-        const usage = await checkScanUsage(user.id);
+        const usage = await checkScanUsage();
 
         if (!usage?.allowed) {
             return Response.json(
@@ -73,7 +72,7 @@ export async function POST(req) {
         }
 
         // 3️⃣ Increment ONLY after success
-        await incrementScanUsage(user.id, usage.currentUsage);
+        await incrementScanUsage( usage.currentUsage);
 
         return Response.json({
             success: true,
@@ -82,7 +81,6 @@ export async function POST(req) {
         });
 
     } catch (error) {
-        console.error("Recipe API Error:", error);
         return Response.json(
             { error: "Something went wrong" },
             { status: 500 }

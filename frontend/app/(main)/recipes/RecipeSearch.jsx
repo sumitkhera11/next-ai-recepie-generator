@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search } from "lucide-react"
 
+const STRAPI_URL = process.env.STRAPI_URL;
 
 export default function RecipeSearch() {
 
@@ -11,23 +12,22 @@ export default function RecipeSearch() {
     const [results, setResults] = useState([]);
 
     useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (!query) return;
 
-        if (!query) return;
-
-        async function searchRecipes() {
-
-            const res = await fetch(
-                `http://localhost:1337/api/recipes?filters[title][$containsi]=${query}`
-            );
-
-            const data = await res.json();
-
-            setResults(data?.data ?? []);
-        }
-
-        searchRecipes();
+            async function searchRecipes() {
+                const res = await fetch(
+                    `${STRAPI_URL}/api/recipes?filters[title][$containsi]=${query}`
+                );
+                const data = await res.json();
+                setResults(data?.data ?? []);
+            }
+            searchRecipes();
+        }, 300);
+        return () => clearTimeout(delayDebounce);
 
     }, [query]);
+
 
     return (
         <section className="mb-16">

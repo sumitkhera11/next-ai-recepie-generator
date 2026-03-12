@@ -188,15 +188,10 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
 
     /* -------------------------------- */
     /* COMPONENT UI */
-    /* -------------------------------- */
-    console.log("IMAGE_URL:",recipe.imageurl);
-    
-
+    /* -------------------------------- */   
     return (
         <>
-
             {/* ---------- SEO JSON ---------- */}
-
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -219,7 +214,6 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                     })
                 }}
             />
-
             <article className="max-w-5xl mx-auto px-4 py-10">
 
                 {/* BACK BUTTON */}
@@ -244,7 +238,7 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                         <div className="relative w-full h-[350px] mb-6 rounded-xl overflow-hidden">
 
                             <Image
-                                src={recipe.imageurl}
+                                src={recipe.imageurl||`https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`}
                                 alt={recipe.title}
                                 fill
                                 className="object-cover"

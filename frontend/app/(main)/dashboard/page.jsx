@@ -14,7 +14,7 @@ const Dashboard = async () => {
     redirect("/")
   }
   const recipeData = await getRecipeOfTheDay()
-  // console.log("DASHBOARD: ",recipeData?.recipe.strArea)
+  
   const categoriesData = await getCategories()
   const areasData = await getAreas()
 
@@ -105,8 +105,6 @@ const Dashboard = async () => {
             </p>
           </div>
           <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4'>
-            {console.log("CATEGORIES1: ", categories)}
-
             {categories.map((category) => (
               <Link
                 key={category.strCategory}

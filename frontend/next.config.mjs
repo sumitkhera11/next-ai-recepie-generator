@@ -21,10 +21,6 @@ const nextConfig = {
         protocol: "https",
         hostname: "www.recipetineats.com",
       },
-      {
-        protocol: "https",
-        hostname: "loremflickr.com",
-      },
     ],
   },
 };

@@ -1,15 +1,21 @@
-// import { getOrGenerateRecipe } from "@/actions/recipe.actions";
 import RecipeUI from "@/components/RecipeUI";
 import { getRecipeBySlug } from "@/lib/strapi";
+import { notFound, redirect } from "next/navigation";
+import { checkUserServer } from "@/lib/checkUserServer"
+
 
 export default async function RecipeDetailPage({ params }) {
-    const { slug } = await params;
+    const user = await checkUserServer();
+    if (!user) redirect("/sign-in");
 
-    // const recipe = await getOrGenerateRecipe(slug);
-    // console.log("GET_OR_GENERATE_RECIPE:", recipe)
+    // const { slug } = await params;
+    const { slug } =  params;
+    if (!slug) {
+        notFound();
+    }
+
     // 🔥 ONLY DB CHECK
     const recipe = await getRecipeBySlug(slug);
-    console.log("RECIPE_OBJECT:", recipe);
 
     if (!recipe) {
         return <div style={{ backgroundColor: "blue", marginTop: 50, color: "white" }}>Recipe not found</div>;

@@ -1,3 +1,5 @@
+import { Sparkles, Clock, Flame, Star } from "lucide-react";
+
 // ===============================
 // Homepage Stats
 // ===============================
@@ -28,25 +30,25 @@ export const SITE_STATS = [
 
 export const FEATURES = [
   {
-    icon: "Sparkles",
+    icon: Sparkles,
     title: "AI Recipe Generation",
     description:
       "Generate complete recipes instantly using AI. Just type ingredients or a dish name and get cooking instructions.",
   },
   {
-    icon: "Clock",
+    icon: Clock,
     title: "Save Time Cooking",
     description:
       "Discover quick and delicious meals without spending hours searching for recipes online.",
   },
   {
-    icon: "Flame",
+    icon: Flame,
     title: "Trending Recipes",
     description:
       "Explore the most popular recipes people are cooking right now from cuisines around the world.",
   },
   {
-    icon: "Star",
+    icon: Star,
     title: "Save Your Favorites",
     description:
       "Bookmark and organize your favorite recipes so you can cook them anytime.",

@@ -12,11 +12,8 @@ export const metadata = {
 
 export default async function RecipesPage() {
 
-    const trending = await getTrendingRecipes()
-    const latest = await getLatestRecipes()
-
-    console.log("TRENDING:", trending)
-    console.log("LATEST:", latest)
+    const trending = await getTrendingRecipes();
+    const latest = await getLatestRecipes();
 
     const categories = [
         "Breakfast",

@@ -12,18 +12,15 @@ const RecipeCard = ({ recipe, variant = "default", priority = false }) => {
                 image: recipe.strMealThumb,
                 href: `/recipes/${recipe.idMeal}`,
                 showImage: true
-
             }
         }
     }
     const data = getRecipeData();
-    console.log("GET_RECIPE_DATA:",data)
     if (variant === "grid") {
         return <Link href={data.href}>
             <Card className="rounded-none overflow-hidden border-stone-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group pt-0">
                 {data.showImage ? (
                     <div className="relative aspect-square">
-                        {/* http://localhost:3000/recipe?cook=Authentic+Norwegian+Kransekake */}
                         <Image
                             src={data.image}
                             alt={data.title}

@@ -1,20 +1,19 @@
 "use server";
 import { checkUserServer } from "@/lib/checkUserServer";
-import { redirect } from "next/navigation"
 
+const STRAPI_URL = process.env.STRAPI_URL;
 
 export async function getOrGenerateRecipe(slug) {
     const user = await checkUserServer();
+
     if (!user) {
-        redirect("/")
+        return { success: false, error: "Unauthorized" }
     }
-
     try {
-        if (!slug) {
-            throw new Error("Recipe name is required");
+        if (!slug || typeof slug !== "string") {
+            return { success: false, error: "Invalid recipe slug" }
         }
-        const res = await fetch("http://localhost:3000/api/recipes", {
-
+        const res = await fetch(`${STRAPI_URL}/api/recipes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -29,12 +28,9 @@ export async function getOrGenerateRecipe(slug) {
         if (!res.ok) return null;
 
         const data = await res.json();
-        console.log("DATA_RECIPE_ID:", data.recipe);
-
         return data.recipe;
 
     } catch (error) {
-        console.log("❌ Error in getOrGenerateRecipe", error)
         throw new Error(error.message || "Failed to load recipe")
     }
 }
@@ -53,20 +49,16 @@ export async function getOrGenerateRecipe(slug) {
 // Dono me token required hai.
 export async function saveRecipeToCollection(recipeId) {
     const user = await checkUserServer();
+
     if (!user) {
-        redirect("/")
+        return { success: false, error: "Unauthorized" }
     }
 
     try {
-        // console.log("RECIPE_SAVED_TO_COLLECTION:",recipeId);
-        console.log("SAVING_RECIPE_ID:", recipeId);
-
-        // const user = await checkUserServer();
         if (!recipeId) {
-            // if(!slug.get("slug")) {
             throw new Error("Recipe name is required");
         }
-        const user = { id: 7 };
+
         // Check if already saved
         // Check existing
         const existingResponse = await fetch(
@@ -78,7 +70,6 @@ export async function saveRecipeToCollection(recipeId) {
                 cache: "no-store",
             }
         );
-        console.log('EXISTING_RESPONSE:', existingResponse);
 
         if (existingResponse.ok) {
             const existingData = await existingResponse.json();
@@ -106,13 +97,9 @@ export async function saveRecipeToCollection(recipeId) {
             }),
         });
         if (!saveResponse.ok) {
-            const errorText = await saveResponse.text();
-            console.error("❌ Failed to save recipe:", errorText);
             throw new Error("Failed to save recipe to collection");
         }
         const savedRecipe = await saveResponse.json();
-        console.log("STRAPI_SAVE_RESPONSE:", savedRecipe);
-        console.log("✅ Recipe saved to user collection:", savedRecipe.data.id);
 
         return {
             success: true,
@@ -122,7 +109,6 @@ export async function saveRecipeToCollection(recipeId) {
         };
 
     } catch (error) {
-        console.log("❌ Error in saveRecipeToCollection", error)
         throw new Error(error.message || "Failed to save recipe")
     }
 }
@@ -131,15 +117,14 @@ export async function saveRecipeToCollection(recipeId) {
 export async function removeRecipeFromCollection(recipeId) {
     const user = await checkUserServer();
     if (!user) {
-        redirect("/")
+        return { success: false, error: "Unauthorized" }
     }
 
+
     try {
-        console.log("RECIPE_REMOVE_FROM_COLLECTION:", recipeId);
         if (!recipeId) {
             throw new Error("Recipe ID is required");
         }
-        const user = { id: 7 };
         // Find saved recipe relation
         const searchResponse = await fetch(
             `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&filters[recipe][id][$eq]=${recipeId}`,
@@ -175,8 +160,6 @@ export async function removeRecipeFromCollection(recipeId) {
         if (!deleteResponse.ok) {
             throw new Error("Failed to remove recipe from collection");
         }
-
-        console.log("✅ Recipe removed from user collection");
 
         return {
             success: true,

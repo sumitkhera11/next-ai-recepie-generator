@@ -8,9 +8,6 @@ import { fetchRecipeImage } from "@/lib/images/fetchRecipeImage";
 const STRAPI_URL = process.env.STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
-console.log("STRAPI TOKEN:", STRAPI_API_TOKEN);
-
-console.log("🚀 STRAPI_URL_BEING_USED_route_js:", STRAPI_URL);
 
 export async function POST(req) {
     try {
@@ -126,8 +123,6 @@ ${schemaInstruction}
         const isAIEnabled = process.env.AI_ENABLED === "true";
 
         if (!isAIEnabled) {
-            console.log("AI disabled - using mock data");
-
             aiRecipe = {
                 title: slug.replace(/-/g, " "),
                 description: "Dev mode generated recipe.",
@@ -151,8 +146,6 @@ ${schemaInstruction}
             aiRecipe = await generateRecipe(finalPrompt);
             // 🔥 Fetch image from Unsplash
             recipeImage = await fetchRecipeImage(aiRecipe.title);
-
-            console.log("RAW_AI_RECIPE_a:", aiRecipe);
         }
         if (!aiRecipe?.title) {
             return Response.json(
@@ -188,7 +181,6 @@ ${schemaInstruction}
         });
 
     } catch (error) {
-        console.error("Recipe API Error:", error);
         return Response.json(
             { error: "Something went wrong" },
             { status: 500 }
@@ -275,22 +267,23 @@ function extractMinutes(value, fallback = 0) {
 
     return Number(nums[0]);
 }
+function normalizeDescription(description) {
+    if (!description) return "";
 
-function toRichTextBlocks(text) {
-    return [
-        {
-            type: "paragraph",
-            children: [
-                {
-                    type: "text",
-                    text: text || "",
-                },
-            ],
-        },
-    ];
+    if (Array.isArray(description)) {
+        return description
+            .map(block => block.children?.map(c => c.text).join(""))
+            .join("\n");
+    }
+
+    if (typeof description === "object") {
+        return JSON.stringify(description);
+    }
+
+    return String(description);
 }
 
-function normalizeRecipe(aiRecipe, slug, userId,imageUrl) {
+function normalizeRecipe(aiRecipe, slug, userId, imageUrl) {
     const allowedCuisines = [
         "italian",
         "chinese",
@@ -317,12 +310,10 @@ function normalizeRecipe(aiRecipe, slug, userId,imageUrl) {
     ];
     const rawCuisine = (aiRecipe.cuisine || "").toLowerCase();
 
-    console.log("RAW_CUISINE:", rawCuisine);
+    
     // 🔥 Find first allowed cuisine that exists inside AI string
     const cuisineValue =
         allowedCuisines.find((c) => rawCuisine.includes(c)) || "other";
-    console.log("FINAL_CUISINE:", cuisineValue);
-
 
     const allowedCategories = [
         "breakfast",
@@ -339,7 +330,7 @@ function normalizeRecipe(aiRecipe, slug, userId,imageUrl) {
     return {
         title: aiRecipe.title || "Untitled Recipe",
         slug,
-        description: toRichTextBlocks(
+        description: normalizeDescription(
             aiRecipe.description ||
             `A delicious ${aiRecipe.title} recipe made with simple ingredients.`
         ),

@@ -9,6 +9,7 @@ const AddToPantryModal = ({ isOpen, onClose, onSuccess }) => {
     const [manualItem, setManualItem] = useState({name: "", quantity: ""})
     
     const handleClose = () => {
+        //reset all states
         setActiveTab("scan")
         setSelectedImage(null)
         setScannedIngredients([])

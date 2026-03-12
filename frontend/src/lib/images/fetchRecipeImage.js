@@ -9,14 +9,25 @@ export async function fetchRecipeImage(recipeName) {
 
         const searchQuery = `${recipeName} food`;
 
+        // const response = await fetch(
+        //     `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery)}&per_page=5&orientation=landscape`,
+        //     {
+        //         headers: {
+        //             Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+        //         },
+        //     }
+        // );
         const response = await fetch(
-            `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery)}&per_page=5&orientation=landscape`,
+            `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+                searchQuery
+            )}&per_page=1&orientation=landscape&content_filter=high`,
             {
                 headers: {
                     Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
                 },
             }
         );
+
 
         if (!response.ok) {
             console.error("Unsplash API error:", response.statusText);
@@ -29,10 +40,9 @@ export async function fetchRecipeImage(recipeName) {
             return "";
         }
 
-        const randomPhoto =
-            data.results[Math.floor(Math.random() * data.results.length)];
+        // const randomPhoto =  data.results[Math.floor(Math.random() * data.results.length)];
 
-        return randomPhoto.urls.regular;
+        return data.results[0].urls.regular;
 
     } catch (error) {
         console.error("Unsplash fetch error:", error);

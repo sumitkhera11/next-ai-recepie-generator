@@ -25,7 +25,6 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   const {userId} = auth();
-  // console.log("LAYOUT USER:", user);
 
   return (
     <ClerkProvider appearance={{baseTheme:neobrutalism}}>

@@ -1,8 +1,0 @@
-C:\Users\dell\Documents\programming\nextjs\PROJECT\next-ai-recepie-generator\frontend\app\(main)\generate\page.jsx
-aigeneraterecipe
-
-
- frontend/src/components/PdfButton.jsx
-        frontend/src/components/ProLockedSection.jsx
-        frontend/src/components/RecipePDF.jsx
-        frontend/src/li

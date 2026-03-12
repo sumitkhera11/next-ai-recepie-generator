@@ -2,8 +2,7 @@
 
 // api fetch data
 const MEALDB_BASE = "http://www.themealdb.com/api/json/v1/1"
-// const MEALDB_BASE = "http://www.themealdb.com/api/json/v1/1/random.php"
-// https://www.themealdb.com/api/json/v1/1/categories.php
+
 
 // daily random recipe
 export async function getRecipeOfTheDay() {
@@ -14,20 +13,11 @@ export async function getRecipeOfTheDay() {
         if (!response.ok) {
             throw new Error("Failed to fetch the recipe of the day");
         }
-        // console.log("Status:", response.status);
         const text = await response.text();
-        // console.log("Raw response:", text);
 
         const data1 = JSON.parse(text);
 
-        // console.log("Parsed data:", data1);
-        // const data = response.json()
-        // if (!data || !data.meals) {
-        //     return { recipe: null };
-        // }
-
         if (!data1?.meals?.length) {
-            // console.log("LENGTH: ", data1?.meals?.length)
             return { recipe: null };
         }
         return {
@@ -50,16 +40,12 @@ export async function getCategories() {
             throw new Error("Failed to fetch categories");
         }
         const data = await response.json()
-        console.log("DATA_CATEGORIES: ", data)
-        const firstCategories = data.meals
-        console.log("FIRST_CATEGORIES: ", firstCategories)
-        
+        const firstCategories = data.meals        
         return {
             success: true,
             categories: data.meals || [],
         }
     } catch (error) {
-        console.error("Error fetching categories:", error);
         throw new Error(error.message || "Failed to load categories")
     }
 }

@@ -54,7 +54,7 @@ ${userPrompt}
 `;
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-lite",
+            model: process.env.GEMINI_MODEL_IMAGE_TEXT_GENERATE,
             contents: [
                 {
                     role: "user",
