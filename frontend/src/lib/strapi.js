@@ -1,8 +1,9 @@
 
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 export async function getRecipeBySlug(slug) {
     try {
         const res = await fetch(
-            `${process.env.STRAPI_URL}/api/recipes?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`,
+            `${STRAPI_URL}/api/recipes?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`,
             { cache: "no-store" }
         );
 
@@ -24,7 +25,7 @@ export async function getRecipeBySlug(slug) {
 
 export async function createRecipe(recipeData) {
     // Step 1: Create draft
-    const createRes = await fetch(`${process.env.STRAPI_URL}/api/recipes`, {
+    const createRes = await fetch(`${STRAPI_URL}/api/recipes`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -42,7 +43,7 @@ export async function createRecipe(recipeData) {
     const documentId = created.data.documentId;
 
     // Step 2: Publish it
-    await fetch(`${process.env.STRAPI_URL}/api/recipes/${documentId}/publish`, {
+    await fetch(`${STRAPI_URL}/api/recipes/${documentId}/publish`, {
         method: "POST",
     });
 

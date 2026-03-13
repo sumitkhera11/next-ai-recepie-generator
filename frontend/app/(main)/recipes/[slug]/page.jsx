@@ -9,9 +9,9 @@ export default async function RecipeDetailPage({ params }) {
     if (!user) redirect("/sign-in");
 
     // const { slug } = await params;
-    const { slug } =  params;
+    const { slug } =  await params;
     if (!slug) {
-        notFound();
+       notFound();
     }
 
     // 🔥 ONLY DB CHECK

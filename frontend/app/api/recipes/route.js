@@ -3,16 +3,12 @@ import { generateRecipe } from "@/lib/ai/generateRecipe";
 import { getRecipeBySlug, createRecipe } from "@/lib/strapi";
 import slugify from "slugify";
 import { fetchRecipeImage } from "@/lib/images/fetchRecipeImage";
-
-//main api route
-const STRAPI_URL = process.env.STRAPI_URL;
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
-
+import { checkUserServer } from "@/lib/checkUserServer";
 
 export async function POST(req) {
     try {
         const body = await req.json();
-        const user = { id: 7 }; // TODO: Replace with real auth
+        const user = await checkUserServer(); // TODO: Replace with real auth
 
         if (!user) {
             return Response.json({ error: "Unauthorized" }, { status: 401 });

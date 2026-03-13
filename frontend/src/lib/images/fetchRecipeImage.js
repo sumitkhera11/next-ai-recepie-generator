@@ -1,4 +1,4 @@
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export async function fetchRecipeImage(recipeName) {
     try {
@@ -9,14 +9,6 @@ export async function fetchRecipeImage(recipeName) {
 
         const searchQuery = `${recipeName} food`;
 
-        // const response = await fetch(
-        //     `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery)}&per_page=5&orientation=landscape`,
-        //     {
-        //         headers: {
-        //             Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
-        //         },
-        //     }
-        // );
         const response = await fetch(
             `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
                 searchQuery
@@ -39,8 +31,6 @@ export async function fetchRecipeImage(recipeName) {
         if (!data.results || data.results.length === 0) {
             return "";
         }
-
-        // const randomPhoto =  data.results[Math.floor(Math.random() * data.results.length)];
 
         return data.results[0].urls.regular;
 

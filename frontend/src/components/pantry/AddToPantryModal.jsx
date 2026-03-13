@@ -209,13 +209,20 @@ export default function AddToPantryModal() {
       setScanning(false);
     }
   };
-  
+
   const handleAddManual = async (e) => {
     e.preventDefault();
 
+    if (!manualItem.name.trim()) {
+      alert("Please enter ingredient name");
+      return;
+    }
+    if (!manualItem.quantity.trim()) {
+      alert("Please enter quantity");
+      return;
+    }
+    setAdding(true);
     try {
-      setAdding(true);
-
       const formData = new FormData();
       formData.append("name", manualItem.name);
       formData.append("quantity", manualItem.quantity);
@@ -399,6 +406,7 @@ export default function AddToPantryModal() {
 
                   <input
                     type="text"
+                    required
                     value={manualItem.name}
                     onChange={(e) =>
                       setManualItem({
@@ -406,7 +414,7 @@ export default function AddToPantryModal() {
                         name: e.target.value
                       })
                     }
-                    placeholder="e.g. Chicken breast"
+                    placeholder="e.g. Tomato, Paneer, or Spinach"
                     className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
                     disabled={adding}
                   />
@@ -419,6 +427,7 @@ export default function AddToPantryModal() {
 
                   <input
                     type="text"
+                    required
                     value={manualItem.quantity}
                     onChange={(e) =>
                       setManualItem({
@@ -426,7 +435,7 @@ export default function AddToPantryModal() {
                         quantity: e.target.value
                       })
                     }
-                    placeholder="e.g. 2 pieces"
+                    placeholder="e.g. 2 cups or 200g"
                     className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
                     disabled={adding}
                   />

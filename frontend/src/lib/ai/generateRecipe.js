@@ -15,8 +15,14 @@
 
 import { GoogleGenAI } from "@google/genai";
 
+const apiKey = process.env.Papa_Gemini_API_KEY;
+
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY missing");
+}
+
 const ai = new GoogleGenAI({
-    apiKey: process.env.SAGAR_GEMINI_API_KEY, // rename env to clean format
+    apiKey:apiKey
 });
 // do not touch this code
 export async function generateRecipe(userPrompt) {

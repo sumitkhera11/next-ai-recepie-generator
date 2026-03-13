@@ -19,12 +19,13 @@ export default function Header({ userId }) {
                 {/* Logo */}
                 <Link href={userId ? "/dashboard" : "/"}>
                     <Image
-                        src="/orange-logo.png"
-                        alt="Recipion Logo"
-                        width={60}
-                        height={60}
-                        className="w-16"
+                        src="/recipion-pro-logo.png"
+                        alt="Recipion AI Recipe Generator Logo"
+                        width={120}
+                        height={120}
+                        className="w-20 md:w-28 h-auto"
                         priority
+                        sizes="(max-width:768px) 80px, 120px"
                     />
                 </Link>
 
@@ -69,24 +70,24 @@ export default function Header({ userId }) {
                                 Free Plan
                             </Badge>
                         )}
-<Link href="/generate">
-<Button
-className="
-bg-orange-600
-hover:bg-orange-700
-text-white
-px-4
-py-2
-rounded-lg
-hidden md:flex
-items-center
-gap-2
-"
->
-<Sparkles className="w-4 h-4"/>
-Generate
-</Button>
-</Link>
+                        <Link href="/generate">
+                            <Button
+                                className="
+                                    bg-orange-600
+                                    hover:bg-orange-700
+                                    text-white
+                                    px-4
+                                    py-2
+                                    rounded-lg
+                                    hidden md:flex
+                                    items-center
+                                    gap-2
+                                    "
+                            >
+                                <Sparkles className="w-4 h-4" />
+                                Generate
+                            </Button>
+                        </Link>
 
                         <UserDropDown />
                     </SignedIn>

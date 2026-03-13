@@ -1,6 +1,6 @@
 import { checkUserServer } from "@/lib/checkUserServer";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 // const FREE_LIMIT = 5;
 
 export async function checkRecipeUsage() {

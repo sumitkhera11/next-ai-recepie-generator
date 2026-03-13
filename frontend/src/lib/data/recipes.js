@@ -1,12 +1,10 @@
 // API Data Layer
-const API_URL = process.env.STRAPI_URL;
-console.log("API_URL:",API_URL);
-
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 export async function getTrendingRecipes() {
     try {
         const res = await fetch(
-            `${API_URL}/api/recipes?populate=*&sort=createdAt:desc&pagination[limit]=8`,
+            `${STRAPI_URL}/api/recipes?populate=*&sort=createdAt:desc&pagination[limit]=8`,
             { next: { revalidate: 60 } }
         );
 
@@ -22,7 +20,7 @@ export async function getTrendingRecipes() {
 export async function getLatestRecipes() {
     try {
         const res = await fetch(
-            `${API_URL}/api/recipes?populate=*&sort=createdAt:desc&pagination[limit]=12`,
+            `${STRAPI_URL}/api/recipes?populate=*&sort=createdAt:desc&pagination[limit]=12`,
             { next: { revalidate: 60 } }
         );
 
@@ -36,7 +34,7 @@ export async function getLatestRecipes() {
 }
 
 export async function getCategories() {
-    const res = await fetch(`${API_URL}/categories`, {
+    const res = await fetch(`${STRAPI_URL}/categories`, {
         next: { revalidate: 3600 },
     });
 
@@ -45,7 +43,7 @@ export async function getCategories() {
 }
 
 export async function getCuisines() {
-    const res = await fetch(`${API_URL}/cuisines`, {
+    const res = await fetch(`${STRAPI_URL}/cuisines`, {
         next: { revalidate: 3600 },
     });
 

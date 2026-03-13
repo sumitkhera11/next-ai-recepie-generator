@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { checkUserServer } from "@/lib/checkUserServer";
 import { revalidatePath } from "next/cache";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 if (!STRAPI_URL) {
@@ -11,8 +11,14 @@ if (!STRAPI_URL) {
 }
 // const FREE_LIMIT = 5;
 
+const apiKey = process.env.Papa_Gemini_API_KEY;
+
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY missing");
+}
+
 const genAI = new GoogleGenAI({
-    apiKey: process.env.Papa_Gemini_API_KEY, // rename env to clean format
+    apiKey: apiKey
 });
 
 export async function checkScanUsage() {
@@ -210,8 +216,11 @@ export async function addPantryItemsManually(formData) {
     try {
         const name = formData.get("name");
         const quantity = formData.get("quantity");
-        if (!name || !quantity) {
-            throw new Error("Name and quantity are required");
+        if (!name?.trim() || !quantity?.trim()) {
+            return {
+                success: false,
+                message: "Please enter ingredient name and quantity"
+            };
         }
         const response = await fetch(`${STRAPI_URL}/api/pantry-items`, {
             method: "POST",
@@ -245,7 +254,10 @@ export async function addPantryItemsManually(formData) {
 
     } catch (error) {
         console.error("Error item added manually:", error);
-        throw new Error(error.message || "Failed to add item");
+        return {
+            success: false,
+            message: "Failed to add item"
+        };
     }
 
 }

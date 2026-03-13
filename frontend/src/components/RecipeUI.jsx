@@ -188,7 +188,7 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
 
     /* -------------------------------- */
     /* COMPONENT UI */
-    /* -------------------------------- */   
+    /* -------------------------------- */
     return (
         <>
             {/* ---------- SEO JSON ---------- */}
@@ -198,22 +198,67 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Recipe",
+
                         name: recipe.title,
-                        image: recipe.imageurl,
+
+                        image:
+                            recipe.imageurl ||
+                            `https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`,
+
                         description: extractTextFromBlocks(recipe.description),
+
+                        author: {
+                            "@type": "Organization",
+                            name: "Recipion"
+                        },
+
+                        publisher: {
+                            "@type": "Organization",
+                            name: "Recipion"
+                        },
+
+                        mainEntityOfPage: {
+                            "@type": "WebPage",
+                            "@id": `https://recipion.com/recipes/${recipe.slug}`
+                        },
+
+                        keywords: [
+                            "AI recipe generator",
+                            "Recipion recipe",
+                            recipe.title,
+                            "cook with ingredients"
+                        ],
+
                         recipeIngredient: normalizedIngredients,
+
                         recipeInstructions: normalizedInstructions.map((s) => ({
                             "@type": "HowToStep",
                             text: s.text
                         })),
-                        prepTime: recipe.preptime ? `PT${recipe.preptime}M` : undefined,
-                        cookTime: recipe.cooktime ? `PT${recipe.cooktime}M` : undefined,
+
+                        prepTime: recipe.preptime
+                            ? `PT${recipe.preptime}M`
+                            : undefined,
+
+                        cookTime: recipe.cooktime
+                            ? `PT${recipe.cooktime}M`
+                            : undefined,
+
+                        totalTime:
+                            recipe.preptime && recipe.cooktime
+                                ? `PT${recipe.preptime + recipe.cooktime}M`
+                                : undefined,
+
                         recipeYield: recipe.servings
                             ? `${recipe.servings} servings`
-                            : undefined
+                            : undefined,
+
+                        recipeCategory: recipe.category || "AI Generated Recipe",
+                        recipeCuisine: recipe.cuisine || "International"
                     })
                 }}
             />
+
             <article className="max-w-5xl mx-auto px-4 py-10">
 
                 {/* BACK BUTTON */}
@@ -238,7 +283,7 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                         <div className="relative w-full h-[350px] mb-6 rounded-xl overflow-hidden">
 
                             <Image
-                                src={recipe.imageurl||`https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`}
+                                src={recipe.imageurl || `https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`}
                                 alt={recipe.title}
                                 fill
                                 className="object-cover"
@@ -472,7 +517,7 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                             </h3>
                         </div>
 
-                        <p className="text-gray-700 leading-relaxed =">
+                        <p className="text-gray-700 leading-relaxed">
                             For the best flavor, use fresh ingredients and cook on medium heat.
                             This recipe pairs well with basmati rice, fresh salad, or yogurt.
                             Adjust spices according to your taste preference.
