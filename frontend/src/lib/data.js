@@ -4,6 +4,9 @@ import { Sparkles, Clock, Flame, Star } from "lucide-react";
 // Homepage Stats
 // ===============================
 
+// UI / landing page data
+//UI data
+
 export const SITE_STATS = [
   {
     label: "Recipes Generated",

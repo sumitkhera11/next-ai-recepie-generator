@@ -1,5 +1,8 @@
 import { Camera, BookOpen, ChefHat, Search } from "lucide-react";
 
+// site marketing content
+// marketing text
+
 export const SITE_STATS = [
   { label: "Free Scans", val: "10/mo" },
   { label: "Recipes Generated", val: "1M+" },

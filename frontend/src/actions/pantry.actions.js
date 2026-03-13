@@ -6,15 +6,16 @@ import { revalidatePath } from "next/cache";
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
+import { FREE_LIMIT } from "@/lib/constants/limits";
+
 if (!STRAPI_URL) {
     throw new Error("STRAPI_URL is not defined");
 }
-// const FREE_LIMIT = 5;
 
 const apiKey = process.env.Papa_Gemini_API_KEY;
 
 if (!apiKey) {
-  throw new Error("GEMINI_API_KEY missing");
+    throw new Error("GEMINI_API_KEY missing");
 }
 
 const genAI = new GoogleGenAI({
@@ -22,48 +23,68 @@ const genAI = new GoogleGenAI({
 });
 
 export async function checkScanUsage() {
-    const user = await checkUserServer();
-    if (!user) {
-        return { allowed: false }
-    }
-    const today = new Date().toISOString().slice(0, 10);
-    const res = await fetch(`${STRAPI_URL}/users/${user.id}`);
-    const strapiUser = await res.json();
 
-    let dailyScanUsage = strapiUser.dailyScanUsage || 0;
-    let lastUsageDate = strapiUser.lastUsageDate;
+  const user = await checkUserServer();
 
-    if (lastUsageDate !== today) {
-        dailyScanUsage = 0;
-    }
-    if (dailyScanUsage >= FREE_LIMIT) {
-        return {
-            allowed: false,
-            currentUsage: dailyScanUsage,
-            remaining: 0,
-        };
-    }
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const today = new Date().toLocaleDateString("en-CA");
+
+  const res = await fetch(`${STRAPI_URL}/users/${user.id}`, {
+    headers: {
+      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+    },
+  });
+
+  const strapiUser = await res.json();
+
+  let dailyScanUsage = strapiUser.dailyScanUsage || 0;
+  let lastUsageDate = strapiUser.lastUsageDate;
+
+  if (lastUsageDate !== today) {
+    dailyScanUsage = 0;
+  }
+
+  if (dailyScanUsage >= FREE_LIMIT) {
     return {
-        allowed: true,
-        currentUsage: dailyScanUsage,
-        remaining: FREE_LIMIT - dailyScanUsage,
+      allowed: false,
+      currentUsage: dailyScanUsage,
+      remaining: 0,
     };
-    // free tier pantry scan limits(10 scans per month)
-    // free tier meal recommendation ()10 scans per month)
+  }
+
+  return {
+    allowed: true,
+    currentUsage: dailyScanUsage,
+    remaining: FREE_LIMIT - dailyScanUsage,
+  };
 }
 
 export async function incrementScanUsage(currentUsage) {
 
-    const today = new Date().toISOString().slice(0, 10);
+  const user = await checkUserServer();
 
-    await fetch(`${STRAPI_URL}/users/${user.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            dailyScanUsage: currentUsage + 1,
-            lastUsageDate: today,
-        }),
-    });
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const today = new Date().toLocaleDateString("en-CA");
+
+  await fetch(`${STRAPI_URL}/users/${user.id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      dailyScanUsage: currentUsage + 1,
+      lastUsageDate: today,
+    }),
+  });
+
+  return { success: true };
 }
 
 export async function scanPantryImage(formData) {
