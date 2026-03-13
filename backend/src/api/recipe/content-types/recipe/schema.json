@@ -16,8 +16,7 @@
       "required": true
     },
     "description": {
-      "type": "blocks",
-      "required": false
+      "type": "text"
     },
     "cuisine": {
       "type": "enumeration",
@@ -64,9 +63,6 @@
       "type": "json",
       "required": true
     },
-    "imageurl": {
-      "type": "string"
-    },
     "isPublic": {
       "type": "boolean",
       "required": true,
@@ -77,6 +73,9 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "recipes"
+    },
+    "imageurl": {
+      "type": "text"
     },
     "preptime": {
       "type": "integer"
