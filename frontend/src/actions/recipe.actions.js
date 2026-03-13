@@ -2,7 +2,7 @@
 import { checkUserServer } from "@/lib/checkUserServer";
 import { FREE_LIMIT } from "@/lib/constants/limits";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL = process.env.STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 export async function getOrGenerateRecipe(slug) {

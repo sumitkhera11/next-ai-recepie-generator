@@ -3,7 +3,7 @@ import { calculateUsage } from "@/lib/usage/checkUsage";
 import { FREE_LIMIT } from "@/lib/constants/limits";
 
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL = process.env.STRAPI_URL;
 // const FREE_LIMIT = 5;
 
 export async function checkRecipeUsage() {

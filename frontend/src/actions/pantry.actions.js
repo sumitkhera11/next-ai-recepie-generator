@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { checkUserServer } from "@/lib/checkUserServer";
 import { revalidatePath } from "next/cache";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_URL = process.env.STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 import { FREE_LIMIT } from "@/lib/constants/limits";
