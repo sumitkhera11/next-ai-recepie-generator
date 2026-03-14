@@ -10,10 +10,10 @@ import {
     Flame,
     Bookmark,
     BookmarkCheck,
-    Loader2
+    Loader2 
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import PdfButton from "@/components/PdfButton";
 import useFetch from "@/hooks/use-fetch";
 

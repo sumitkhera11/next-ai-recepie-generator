@@ -8,7 +8,7 @@ import { getPantryItems } from "@/actions/pantry.actions";
 import PantryGrid from "@/components/pantry/PantryGrid";
 import { redirect } from "next/navigation"
 import Link from 'next/link';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 import { checkUserServer } from "@/lib/checkUserServer";
 
