@@ -8,6 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 import { ClerkProvider } from "@clerk/nextjs"
 import { neobrutalism } from "@clerk/themes";
 import { Toaster } from "@/components/ui/sonner";
+import SyncUser from "@/components/SyncUser";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }) {
         <body
           className={`${inter.className}`}
         >
+          <SyncUser/>
           <Header userId={userId} />
           <main className="min-h-screen">
             <Toaster richColors />
