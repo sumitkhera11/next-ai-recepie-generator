@@ -15,14 +15,14 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.Papa_Gemini_API_KEY;
+const GEMINI_API_KEY = process.env.Papa_Gemini_API_KEY;
 
-if (!apiKey) {
-  throw new Error("GEMINI_API_KEY missing");
+if (!GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY missing");
 }
 
 const ai = new GoogleGenAI({
-    apiKey:apiKey
+    apiKey: GEMINI_API_KEY
 });
 // do not touch this code
 export async function generateRecipe(userPrompt) {
@@ -67,6 +67,10 @@ ${userPrompt}
                     parts: [{ text: systemPrompt }],
                 },
             ],
+            generationConfig: {
+                temperature: 0.4,
+                maxOutputTokens: 800,
+            },
         });
 
         // ✅ THIS IS THE CORRECT WAY
