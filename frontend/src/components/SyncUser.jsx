@@ -13,6 +13,7 @@ export default function SyncUser() {
       try {
         const email = user.emailAddresses[0].emailAddress;
         const clerkId = user.id;
+        const username = user.firstName || "user";
 
         console.log("Checking user in Strapi...");
 
@@ -30,7 +31,7 @@ export default function SyncUser() {
 
         console.log("Creating new user in Strapi...");
 
-        // 2️⃣ Create user if not exists
+        // 2️⃣ Create new user
         const createRes = await fetch(
           "https://next-ai-recepie-generator.onrender.com/api/users",
           {
@@ -39,20 +40,21 @@ export default function SyncUser() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              username: user.firstName || "user",
+              username: username,
               email: email,
               password: "clerk-auth-user",
               provider: "clerk",
-              clerkId: clerkId,
               confirmed: true,
-              blocked: false
+              blocked: false,
+              role: 1, // 👈 Authenticated role
+              clerkId: clerkId
             }),
           }
         );
 
         const data = await createRes.json();
 
-        console.log("Strapi user created:", data);
+        console.log("Strapi response:", data);
 
       } catch (error) {
         console.error("User sync failed:", error);
