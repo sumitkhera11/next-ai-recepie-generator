@@ -16,13 +16,15 @@ export default function SyncUser() {
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              username: user.username || user.firstName,
-              email: user.emailAddresses[0].emailAddress,
-              clerkId: user.id,
-            }),
+              data: {
+                username: user.username || user.firstName,
+                email: user.emailAddresses[0].emailAddress,
+                clerkId: user.id
+              }
+            })
           }
         );
       } catch (err) {
