@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, Flame, Star, Sparkles } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 
 import { SITE_STATS, FEATURES, HOW_IT_WORKS_STEPS } from "@/lib/data";
 
@@ -70,12 +71,23 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4">
 
-              <Link href="/generate">
-                <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
-                  Generate Recipe
-                  <Sparkles className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
+              <SignedIn>
+                <Link href="/generate">
+                  <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
+                    Generate Recipe
+                    <Sparkles className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </SignedIn>
+
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
+                    Generate Recipe
+                    <Sparkles className="ml-2 w-4 h-4" />
+                  </Button>
+                </SignInButton>
+              </SignedOut>
 
               <Link href="/recipes">
                 <Button variant="outline" size="lg">

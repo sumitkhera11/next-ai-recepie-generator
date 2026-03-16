@@ -42,7 +42,7 @@ export default function SyncUser() {
             body: JSON.stringify({
               username: username,
               email: email,
-              password: "clerk-auth-user",
+              password: crypto.randomUUID(),
               provider: "clerk",
               confirmed: true,
               blocked: false,

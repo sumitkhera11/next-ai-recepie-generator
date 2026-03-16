@@ -89,7 +89,7 @@ export default async function RootLayout({ children }) {
 
 
                 {/* Credit */}
-                <div className="flex justify-end items-center text-sm text-stone-500">
+                <div className="flex justify-center items-center text-sm text-stone-500">
 
                   <span>Made with</span>
 
