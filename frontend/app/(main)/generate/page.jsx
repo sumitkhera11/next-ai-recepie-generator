@@ -11,7 +11,7 @@ import { checkUserServer } from "@/lib/checkUserServer"
 async function generateRecipe(formData) {
     "use server"
     const user = await checkUserServer();
-    if (!user) redirect("/");
+     if (!user) redirect("/sign-in?redirect_url=/generate");
 
     const rawInput = formData.get("slug")
 

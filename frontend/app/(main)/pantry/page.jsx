@@ -20,7 +20,7 @@ export default async function Pantry() {
     const user = await checkUserServer();
 
     if (!user) {
-        redirect("/");
+        redirect("/sign-in");
     }
     const start = Date.now();
     const label = `pantry-fetch-${Date.now()}`;
