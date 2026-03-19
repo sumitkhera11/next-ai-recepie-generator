@@ -232,7 +232,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 import { Edit2, Trash2, Check, X, Loader2 } from "lucide-react";
 import { deletePantryItem, updatePantryItem } from "@/actions/pantry.actions";

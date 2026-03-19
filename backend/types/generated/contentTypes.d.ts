@@ -107,43 +107,6 @@ export interface AdminApiTokenPermission extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface AdminAuditLog extends Struct.CollectionTypeSchema {
-  collectionName: 'strapi_audit_logs';
-  info: {
-    displayName: 'Audit Log';
-    pluralName: 'audit-logs';
-    singularName: 'audit-log';
-  };
-  options: {
-    draftAndPublish: false;
-    timestamps: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    action: Schema.Attribute.String & Schema.Attribute.Required;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    date: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'admin::audit-log'> &
-      Schema.Attribute.Private;
-    payload: Schema.Attribute.JSON;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    user: Schema.Attribute.Relation<'oneToOne', 'admin::user'>;
-  };
-}
-
 export interface AdminPermission extends Struct.CollectionTypeSchema {
   collectionName: 'admin_permissions';
   info: {
@@ -489,10 +452,7 @@ export interface ApiPantryItemPantryItem extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    owner: Schema.Attribute.Relation<
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
+    owner: Schema.Attribute.Relation<'manyToOne', 'api::users-data.users-data'>;
     publishedAt: Schema.Attribute.DateTime;
     quantity: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -610,6 +570,40 @@ export interface ApiSavedRecipeSavedRecipe extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+  };
+}
+
+export interface ApiUsersDataUsersData extends Struct.CollectionTypeSchema {
+  collectionName: 'users_datas';
+  info: {
+    displayName: 'Users Data';
+    pluralName: 'users-datas';
+    singularName: 'users-data';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    clerkId: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::users-data.users-data'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    pantry_items: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pantry-item.pantry-item'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1094,10 +1088,6 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
-    pantry_items: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::pantry-item.pantry-item'
-    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -1134,7 +1124,6 @@ declare module '@strapi/strapi' {
     export interface ContentTypeSchemas {
       'admin::api-token': AdminApiToken;
       'admin::api-token-permission': AdminApiTokenPermission;
-      'admin::audit-log': AdminAuditLog;
       'admin::permission': AdminPermission;
       'admin::role': AdminRole;
       'admin::session': AdminSession;
@@ -1144,6 +1133,7 @@ declare module '@strapi/strapi' {
       'api::pantry-item.pantry-item': ApiPantryItemPantryItem;
       'api::recipe.recipe': ApiRecipeRecipe;
       'api::saved-recipe.saved-recipe': ApiSavedRecipeSavedRecipe;
+      'api::users-data.users-data': ApiUsersDataUsersData;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

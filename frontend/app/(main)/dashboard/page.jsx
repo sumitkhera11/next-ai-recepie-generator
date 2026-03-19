@@ -1,7 +1,7 @@
 import { getRecipeOfTheDay, getCategories, getAreas } from '@/actions/mealdb.actions'
 import { ArrowRight, Flame, Globe } from 'lucide-react'
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import Link from 'next/link'
 import Image from 'next/image'
 import React from 'react'

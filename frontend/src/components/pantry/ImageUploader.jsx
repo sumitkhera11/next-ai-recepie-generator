@@ -3,7 +3,7 @@
 import React, { useCallback, useState, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Camera, Upload, X, Loader2, ImageIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { RingLoader } from 'react-spinners';
 import Image from "next/image";
 

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "users_datas",
+  "info": {
+    "singularName": "users-data",
+    "pluralName": "users-datas",
+    "displayName": "Users Data"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "clerkId": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "name": {
+      "type": "string"
+    },
+    "pantry_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pantry-item.pantry-item",
+      "mappedBy": "owner"
+    }
+  }
+}

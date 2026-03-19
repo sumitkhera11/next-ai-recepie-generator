@@ -74,3 +74,9 @@ Thumbs.db
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+
+app/notes/

@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { checkUserServer } from "@/lib/checkUserServer";
 import { revalidatePath } from "next/cache";
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 import { FREE_LIMIT } from "@/lib/constants/limits";
@@ -12,7 +12,7 @@ if (!STRAPI_URL) {
     throw new Error("STRAPI_URL is not defined");
 }
 
-const apiKey = process.env.Papa_Gemini_API_KEY;
+const apiKey = process.env.Dev_Gemini_key;
 
 if (!apiKey) {
     throw new Error("GEMINI_API_KEY missing");
@@ -24,67 +24,67 @@ const genAI = new GoogleGenAI({
 
 export async function checkScanUsage() {
 
-  const user = await checkUserServer();
+    const user = await checkUserServer();
 
-  if (!user) {
-    return { success: false, error: "Unauthorized" };
-  }
+    if (!user) {
+        return { success: false, error: "Unauthorized" };
+    }
 
-  const today = new Date().toLocaleDateString("en-CA");
+    const today = new Date().toLocaleDateString("en-CA");
 
-  const res = await fetch(`${STRAPI_URL}/users/${user.id}`, {
-    headers: {
-      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-    },
-  });
+    const res = await fetch(`${STRAPI_URL}/users/${user.id}`, {
+        headers: {
+            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+        },
+    });
 
-  const strapiUser = await res.json();
+    const strapiUser = await res.json();
 
-  let dailyScanUsage = strapiUser.dailyScanUsage || 0;
-  let lastUsageDate = strapiUser.lastUsageDate;
+    let dailyScanUsage = strapiUser.dailyScanUsage || 0;
+    let lastUsageDate = strapiUser.lastUsageDate;
 
-  if (lastUsageDate !== today) {
-    dailyScanUsage = 0;
-  }
+    if (lastUsageDate !== today) {
+        dailyScanUsage = 0;
+    }
 
-  if (dailyScanUsage >= FREE_LIMIT) {
+    if (dailyScanUsage >= FREE_LIMIT) {
+        return {
+            allowed: false,
+            currentUsage: dailyScanUsage,
+            remaining: 0,
+        };
+    }
+
     return {
-      allowed: false,
-      currentUsage: dailyScanUsage,
-      remaining: 0,
+        allowed: true,
+        currentUsage: dailyScanUsage,
+        remaining: FREE_LIMIT - dailyScanUsage,
     };
-  }
-
-  return {
-    allowed: true,
-    currentUsage: dailyScanUsage,
-    remaining: FREE_LIMIT - dailyScanUsage,
-  };
 }
 
 export async function incrementScanUsage(currentUsage) {
 
-  const user = await checkUserServer();
+    const user = await checkUserServer();
 
-  if (!user) {
-    return { success: false, error: "Unauthorized" };
-  }
+    if (!user) {
+        return { success: false, error: "Unauthorized" };
+    }
 
-  const today = new Date().toLocaleDateString("en-CA");
+    const today = new Date().toLocaleDateString("en-CA");
 
-  await fetch(`${STRAPI_URL}/users/${user.id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      dailyScanUsage: currentUsage + 1,
-      lastUsageDate: today,
-    }),
-  });
+    await fetch(`${STRAPI_URL}/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            dailyScanUsage: currentUsage + 1,
+            lastUsageDate: today,
+        }),
+    });
 
-  return { success: true };
+    return { success: true };
 }
 
 export async function scanPantryImage(formData) {
@@ -185,16 +185,19 @@ Return ONLY the JSON array.
 }
 
 export async function saveToPantry(formData) {
+   
     const user = await checkUserServer();
     if (!user) {
         return { success: false, error: "Unauthorized" }
     }
+   
     try {
         const ingredientsJson = formData.get("ingredients");
         const ingredients = JSON.parse(ingredientsJson);
         if (!ingredients || ingredients.length === 0) {
             throw new Error("No ingredients to save")
         }
+
 
         const savedItems = [];
         for (const ingredient of ingredients) {
@@ -208,12 +211,11 @@ export async function saveToPantry(formData) {
                     data: {
                         name: ingredient.name,
                         quantity: ingredient.quantity,
-                        imageUrl: "",
+                        imageurl: "",
                         owner: user.id,
                     },
                 }),
             });
-
             if (response.ok) {
                 const data = await response.json()
                 savedItems.push(data.data);
@@ -287,6 +289,7 @@ export async function getPantryItems() {
     if (!user) {
         return { success: false, items: [] };
     }
+
     try {
         const response = await fetch(
             `${STRAPI_URL}/api/pantry-items?filters[owner][id][$eq]=${user.id}&sort=createdAt:desc`,
@@ -297,9 +300,13 @@ export async function getPantryItems() {
                 cache: "no-store" // caching
             }
         );
-
         if (!response.ok) {
-            throw new Error("Failed to fetch pantry items");
+            console.error("PANTRY FETCH FAILED");
+
+            return {
+                success: false,
+                items: [],
+            };
         }
         const data = await response.json();
         // const isPro = user.subscriptionTier === "pro";

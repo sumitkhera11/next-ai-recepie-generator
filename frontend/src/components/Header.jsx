@@ -5,8 +5,8 @@ import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Cookie, Refrigerator, Sparkles } from "lucide-react";
 import UserDropDown from "./UserDropDown";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 
 export default function Header({ userId }) {
     return (
