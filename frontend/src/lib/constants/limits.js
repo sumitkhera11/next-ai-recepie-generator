@@ -10,6 +10,7 @@ export const RECIPE_GENERATE_LIMIT = 5;
 export const LIMITS = {
   FREE: {
     RECIPE_PER_DAY: 5,
-    SCAN_PER_DAY: 5
+    SCAN_PER_DAY: 5,
+    SAVED_RECIPES: 10
   }
 };

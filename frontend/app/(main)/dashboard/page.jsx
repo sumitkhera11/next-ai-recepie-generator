@@ -4,9 +4,11 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import Link from 'next/link'
 import Image from 'next/image'
+import { redirect } from "next/navigation"
 import React from 'react'
 import { getCategoryEmoji, getCountryFlag } from '@/lib/data';
 import { checkUserServer } from "@/lib/checkUserServer";
+import { slugify } from "@/lib/slugify"
 
 const Dashboard = async () => {
   const user = await checkUserServer();
@@ -14,11 +16,13 @@ const Dashboard = async () => {
     redirect("/")
   }
   const recipeData = await getRecipeOfTheDay()
-  
+
   const categoriesData = await getCategories()
   const areasData = await getAreas()
 
   const recipeOfTheDay = recipeData?.recipe;
+  console.log("RECIPE_OF_THE_DAY:", recipeOfTheDay)
+
 
   const categories = categoriesData?.categories || [];
   const areas = areasData?.areas || [];
@@ -43,55 +47,55 @@ const Dashboard = async () => {
                 Recipe of the Day
               </h2>
             </div>
-            <Link href={`/recipe?cook=${encodeURIComponent(recipeOfTheDay.strMeal)}`}>
-              <div className='relative bg-white border-2 border-stone-900 overflow-hidden
-                hover:border-orange-600 hover:shadow-lg transition-all duration-300 group cursor-pointer'>
-                <div className='grid md:grid-cols-2 gap-0'>
-                  <div className='relative aspect-4/3 md:aspect-auto border-b-2 md:border-b-0 md:border-r-2 border-stone-900'>
-                    <Image
-                      src={recipeOfTheDay.strMealThumb}
-                      alt={recipeOfTheDay.strMeal}
-                      fill
-                      priority
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className='p-8 md:p-12 flex flex-col justify-center'>
-                    <div className='flex flex-wrap gap-2 mb-6'>
-                      {/* Category Badge */}
-                      <Badge
-                        variant='outline'
-                        className='border-2 border-orange-600 text-orange-600 bg-stone-50 font-bold'
-                      >
-                        <Globe className='w-3 h-3 mr-1' />
-                        {recipeOfTheDay.strCategory}
-                      </Badge>
-                      <Badge
-                        variant='outline'
-                        className='border-2 border-stone-900 text-stone-700 bg-stone-50 font-bold'
-                      >
-                        <Globe className='w-3 h-3 mr-1' />
-                        {recipeOfTheDay.strArea}
-                      </Badge>
-                    </div>
-                    <h3 className='text-4xl md:text-5xl font-bold text-stone-900 mb-4 group-hover:text-orange-600 transition-colors leading-light'>
-                      {recipeOfTheDay.strMeal}
-                    </h3>
-                    <p className='text-stone-600 mb-6 line-clamp-3 font-light text-lg'>
-                      {recipeOfTheDay.strInstructions?.substring(0, 200)}...
-                    </p>
-                    <Link href={`/recipes/${recipeOfTheDay.slug}`}>
-                      <Button variant="primary" size="lg">
-                        Start Cooking
-                        <ArrowRight className="w-5 h-5 ml-2" />
-                      </Button>
-                    </Link>
 
+            <div className='relative bg-white border-2 border-stone-900 overflow-hidden
+                hover:border-orange-600 hover:shadow-lg transition-all duration-300 group'>
+              <div className='grid md:grid-cols-2 gap-0'>
+                <div className='relative aspect-4/3 md:aspect-auto border-b-2 md:border-b-0 md:border-r-2 border-stone-900'>
+                  <Image
+                    src={recipeOfTheDay.strMealThumb}
+                    alt={recipeOfTheDay.strMeal}
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className='p-8 md:p-12 flex flex-col justify-center'>
+                  <div className='flex flex-wrap gap-2 mb-6'>
+                    {/* Category Badge */}
+                    <Badge
+                      variant='outline'
+                      className='border-2 border-orange-600 text-orange-600 bg-stone-50 font-bold'
+                    >
+                      <Globe className='w-3 h-3 mr-1' />
+                      {recipeOfTheDay.strCategory}
+                    </Badge>
+                    <Badge
+                      variant='outline'
+                      className='border-2 border-stone-900 text-stone-700 bg-stone-50 font-bold'
+                    >
+                      <Globe className='w-3 h-3 mr-1' />
+                      {recipeOfTheDay.strArea}
+                    </Badge>
                   </div>
+                  <h3 className='text-4xl md:text-5xl font-bold text-stone-900 mb-4 group-hover:text-orange-600 transition-colors leading-light'>
+                    {recipeOfTheDay.strMeal}
+                  </h3>
+                  <p className='text-stone-600 mb-6 line-clamp-3 font-light text-lg'>
+                    {recipeOfTheDay.strInstructions?.substring(0, 200)}...
+                  </p>
+                  <Link href={`/recipes/${slugify(recipeOfTheDay.strMeal)}`}>
+                    <Button variant="primary" size="lg">
+                      Start Cooking
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+
                 </div>
               </div>
-            </Link>
+            </div>
+
           </section>
         )}
         {/* Browse by Categories  */}

@@ -16,8 +16,7 @@
       "required": true
     },
     "description": {
-      "type": "blocks",
-      "required": false
+      "type": "text"
     },
     "cuisine": {
       "type": "enumeration",
@@ -72,12 +71,6 @@
       "required": true,
       "default": false
     },
-    "author": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "recipes"
-    },
     "preptime": {
       "type": "integer"
     },
@@ -106,6 +99,12 @@
       "type": "uid",
       "targetField": "title",
       "required": true
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "recipes"
     }
   }
 }

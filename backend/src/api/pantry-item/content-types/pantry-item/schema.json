@@ -24,7 +24,7 @@
     "owner": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::users-data.users-data",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "pantry_items"
     }
   }

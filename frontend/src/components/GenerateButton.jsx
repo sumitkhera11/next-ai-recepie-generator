@@ -2,7 +2,7 @@
 
 import { useFormStatus } from "react-dom"
 import { Sparkles, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 
 export default function GenerateButton() {
 
@@ -15,6 +15,7 @@ export default function GenerateButton() {
       size="default"
       disabled={pending}
       className="gap-2"
+      suppressHydrationWarning
     >
       {pending ? (
         <>

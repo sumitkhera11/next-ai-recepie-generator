@@ -3,7 +3,21 @@ import { redirect } from "next/navigation"
 import { ChefHat, Clock, Brain } from "lucide-react"
 import GenerateButton from "@/components/GenerateButton"
 import { checkUserServer } from "@/lib/checkUserServer"
-
+import { slugify } from "@/lib/slugify"
+// GeneratePage (form)
+//     ↓
+// Server Action (generateRecipe)
+//     ↓
+// getOrGenerateRecipe()
+//     ↓
+// 1. Check DB
+// 2. Generate AI
+// 3. Fetch Unsplash image
+// 4. Normalize
+// 5. Save to Strapi
+// 6. Return recipe
+//     ↓
+// redirect(`/recipes/${recipe.slug}`)
 
 // ----------------------
 // Server Action
@@ -11,20 +25,24 @@ import { checkUserServer } from "@/lib/checkUserServer"
 async function generateRecipe(formData) {
     "use server"
     const user = await checkUserServer();
+    console.log("GENERATE_RECIPE_CHECK_USER:", user)
     if (!user) redirect("/");
 
     const rawInput = formData.get("slug")
 
     if (!rawInput) return
 
-    const slug = rawInput
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
+    const slug = slugify(rawInput)
+    console.log("GENERATE_RECIPE:", slug)
 
-    const recipe = await getOrGenerateRecipe(slug)
-    if (!recipe) return
-    redirect(`/recipes/${recipe.slug}`)
+    const result = await getOrGenerateRecipe(slug);
+
+    if (!result?.success || !result?.recipe) {
+    console.error("RECIPE GENERATION FAILED:", result);
+    return;
+}
+
+redirect(`/recipes/${result.recipe.slug}`);
 }
 
 // ----------------------
@@ -39,6 +57,7 @@ export const metadata = {
 
 export default async function GeneratePage() {
     const user = await checkUserServer();
+    console.log("GENERATE_PAGE_CHECK_USER_SERVER_RESULT:", user)
     if (!user) {
         redirect("/sign-in")
     }
@@ -68,9 +87,11 @@ export default async function GeneratePage() {
                     <form action={generateRecipe} className="flex flex-col sm:flex-row gap-4">
                         <input
                             name="slug"
+                            autoComplete="off"
                             placeholder="e.g. butter chicken, paneer tikka, pasta"
                             className="flex-1 border border-stone-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
                             required
+                            suppressHydrationWarning
                         />
                         <GenerateButton />
                     </form>
@@ -167,9 +188,7 @@ export default async function GeneratePage() {
                     healthy meal ideas, vegan recipes, or international cuisine,
                     our AI can generate the perfect recipe instantly.
                 </p>
-
             </section>
-
         </div>
     )
 }

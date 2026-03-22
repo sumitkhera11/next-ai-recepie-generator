@@ -26,6 +26,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
+    console.log("RECIPEUI_RECIPE:",recipe)
+    console.log("RECIPEUI_RECIPE_length:",recipe.length)
 
     const router = useRouter();
 
@@ -177,6 +179,9 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
     /* -------------------------------- */
     /* SAFETY */
     /* -------------------------------- */
+    if (!recipe?.title) {
+        console.warn("Recipe title missing", recipe);
+    }
 
     if (!recipe) {
         return (
@@ -189,6 +194,9 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
     /* -------------------------------- */
     /* COMPONENT UI */
     /* -------------------------------- */
+                       // recipe?.title
+                        // Agar recipe hai → title le lo
+                        // Agar recipe ya title undefined → error nahi aayega
     return (
         <>
             {/* ---------- SEO JSON ---------- */}
@@ -198,14 +206,14 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                     __html: JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "Recipe",
-
-                        name: recipe.title,
+                      
+                        name: recipe?.title || "Recipe",
 
                         image:
-                            recipe.imageurl ||
-                            `https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`,
+                            recipe?.imageurl ||
+                            `https://source.unsplash.com/featured/?${(recipe?.title || "food").replace(/ /g, "+")},food`,
 
-                        description: extractTextFromBlocks(recipe.description),
+                        description: extractTextFromBlocks(recipe?.description),
 
                         author: {
                             "@type": "Organization",
@@ -219,13 +227,13 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
 
                         mainEntityOfPage: {
                             "@type": "WebPage",
-                            "@id": `https://recipion.com/recipes/${recipe.slug}`
+                            "@id": `https://recipion.com/recipes/${recipe?.slug || ""}`
                         },
 
                         keywords: [
                             "AI recipe generator",
                             "Recipion recipe",
-                            recipe.title,
+                            recipe?.title || "recipe",
                             "cook with ingredients"
                         ],
 
@@ -236,25 +244,25 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                             text: s.text
                         })),
 
-                        prepTime: recipe.preptime
+                        prepTime: recipe?.preptime
                             ? `PT${recipe.preptime}M`
                             : undefined,
 
-                        cookTime: recipe.cooktime
+                        cookTime: recipe?.cooktime
                             ? `PT${recipe.cooktime}M`
                             : undefined,
 
                         totalTime:
-                            recipe.preptime && recipe.cooktime
+                            recipe?.preptime && recipe?.cooktime
                                 ? `PT${recipe.preptime + recipe.cooktime}M`
                                 : undefined,
 
-                        recipeYield: recipe.servings
+                        recipeYield: recipe?.servings
                             ? `${recipe.servings} servings`
                             : undefined,
 
-                        recipeCategory: recipe.category || "AI Generated Recipe",
-                        recipeCuisine: recipe.cuisine || "International"
+                        recipeCategory: recipe?.category || "AI Generated Recipe",
+                        recipeCuisine: recipe?.cuisine || "International"
                     })
                 }}
             />
@@ -283,7 +291,7 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                         <div className="relative w-full h-[350px] mb-6 rounded-xl overflow-hidden">
 
                             <Image
-                                src={recipe.imageurl || `https://source.unsplash.com/featured/?${recipe.title.replace(/ /g, "+")},food`}
+                                src={recipe?.imageurl || `https://source.unsplash.com/featured/?${(recipe?.title || "food").replace(/ /g, "+")},food`}
                                 alt={recipe.title}
                                 fill
                                 className="object-cover"
@@ -450,8 +458,6 @@ export default function RecipeUI({ recipe, fallback = "/dashboard" }) {
                                 Cooking Instructions
                             </h2>
                         </div>
-
-
                         {normalizedInstructions.length > 0 ? (
 
                             <ol className="space-y-8">

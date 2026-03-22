@@ -7,8 +7,10 @@ import { Cookie, Refrigerator, Sparkles } from "lucide-react";
 import UserDropDown from "./UserDropDown";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { usePathname } from "next/navigation";
 
 export default function Header({ userId }) {
+    const pathname = usePathname();
     return (
         <header className="fixed top-0 w-full border-b border-stone-200 
       bg-stone-50/80 backdrop-blur-md z-50 
@@ -31,25 +33,60 @@ export default function Header({ userId }) {
 
                 {/* Center Navigation */}
                 <div className="hidden md:flex gap-8 text-sm font-medium">
-                    <Link href="/recipes" className="hover:text-orange-600 transition-colors flex gap-1.5 items-center">
+
+                    {/* Dashboard */}
+                    <SignedIn>
+                        <Link
+                            href="/dashboard"
+                            className={`flex gap-1.5 items-center hover:text-orange-600 transition-colors ${pathname === "/dashboard" ? "text-orange-600 font-bold" : ""
+                                }`}
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            Dashboard
+                        </Link>
+                        {/* Saved */}
+                        <Link
+                            href="/saved"
+                            className={`flex gap-1.5 items-center hover:text-orange-600 transition-colors ${pathname === "/saved" ? "text-orange-600 font-bold" : ""
+                                }`}
+                        >
+                            ❤️ Saved
+                        </Link>
+                        {/* Pantry */}
+                        <Link
+                            href="/pantry"
+                            className={`flex gap-1.5 items-center hover:text-orange-600 transition-colors ${pathname === "/pantry" ? "text-orange-600 font-bold" : ""
+                                }`}
+                        >
+                            <Refrigerator className="w-4 h-4" />
+                            My Pantry
+                        </Link>
+                    </SignedIn>
+                    {/* Recipes */}
+                    <Link
+                        href="/recipes"
+                        className={`flex gap-1.5 items-center hover:text-orange-600 transition-colors ${pathname.startsWith("/recipes") ? "text-orange-600 font-bold" : ""
+                            }`}
+                    >
                         <Cookie className="w-4 h-4" />
                         Recipes
                     </Link>
-                    <Link href="/pantry" className="hover:text-orange-600 transition-colors flex gap-1.5 items-center">
-                        <Refrigerator className="w-4 h-4" />
-                        My Pantry
-                    </Link>
+
+
+
+
+
                 </div>
 
                 {/* Right Section */}
                 <div className="flex items-center gap-4">
 
                     <SignedOut>
-                        <SignInButton mode="modal">
+                        <SignInButton mode="modal" forceRedirectUrl="/dashboard">
                             <Button variant="ghost">Sign In</Button>
                         </SignInButton>
 
-                        <SignUpButton mode="modal">
+                        <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
                             <Button variant="primary">Get Started</Button>
                         </SignUpButton>
                     </SignedOut>

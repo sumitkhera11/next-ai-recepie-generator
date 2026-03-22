@@ -2,7 +2,7 @@
 
 // import { PDFDownloadLink } from "@react-pdf/renderer";
 import RecipePDF from "@/components/RecipePDF";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import dynamic from "next/dynamic";
 import {Download} from "lucide-react";
 
@@ -16,6 +16,7 @@ const PDFDownloadLink = dynamic(
 
 
 export default function PdfButton({ recipe }) {
+    console.log("RECIPE_PDF:",recipe)
     return (
         <PDFDownloadLink
             document={<RecipePDF recipe={recipe} />}

@@ -15,14 +15,14 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.Papa_Gemini_API_KEY;
+const apiKey = process.env.Dev_Gemini_key;
 
 if (!apiKey) {
-  throw new Error("GEMINI_API_KEY missing");
+    throw new Error("GEMINI_API_KEY missing");
 }
 
 const ai = new GoogleGenAI({
-    apiKey:apiKey
+    apiKey: apiKey
 });
 // do not touch this code
 export async function generateRecipe(userPrompt) {
@@ -39,23 +39,46 @@ export async function generateRecipe(userPrompt) {
         const systemPrompt = `
 You are a professional chef AI.
 
-Generate a detailed recipe based on the user request.
+Generate a COMPLETE recipe in STRICT JSON format.
 
-Return response in clean JSON format:
+IMPORTANT RULES:
+- Do NOT return null
+- Do NOT leave any field empty
+- Always fill ALL fields
+- Use realistic values
+- ingredients must be array of objects
+- instructions must be array of strings
 
-Generate a recipe in strict JSON format:
+Return ONLY JSON:
+
 {
-  "title": "",
-  "description": "",
-  "ingredients": [],
-  "instructions": [],
-  "cuisine": "",
-  "prepTime": "",
-  "cookTime": ""
+  "title": "string",
+  "description": "string",
+  "cuisine": "string",
+  "category": "string",
+  "ingredients": [
+    {
+      "item": "string",
+      "quantity": "string",
+      "unit": "string",
+      "notes": "string"
+    }
+  ],
+  "instructions": ["string"],
+  "prepTime": "string",
+  "cookTime": "string",
+  "servings": number,
+  "nutrition": {
+    "fat": "string",
+    "carbs": "string",
+    "protein": "string",
+    "calories": "string"
+  },
+  "tips": ["string"],
+  "substitutions": ["string"]
 }
-Return ONLY valid JSON.
 
-User Request:
+User request:
 ${userPrompt}
 `;
 

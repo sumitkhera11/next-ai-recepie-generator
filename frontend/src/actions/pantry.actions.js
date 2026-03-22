@@ -300,6 +300,7 @@ export async function getPantryItems() {
                 cache: "no-store" // caching
             }
         );
+        console.log("PANTRY_RESPONSE:",response)
         if (!response.ok) {
             console.error("PANTRY FETCH FAILED");
 

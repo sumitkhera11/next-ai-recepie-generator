@@ -3,7 +3,8 @@ import { calculateUsage } from "@/lib/usage/checkUsage";
 import { FREE_LIMIT } from "@/lib/constants/limits";
 
 
-const STRAPI_URL = process.env.STRAPI_URL;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 // const FREE_LIMIT = 5;
 
 export async function checkRecipeUsage() {
@@ -36,10 +37,10 @@ export async function incrementRecipeUsage(currentUsage) {
 
   const today = new Date().toLocaleDateString("en-CA");
 
-  await fetch(`${process.env.STRAPI_URL}/users/${user.id}`, {
+  await fetch(`${STRAPI_URL}/users/${user.id}`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+      Authorization: `Bearer ${STRAPI_API_TOKEN}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({

@@ -71,12 +71,6 @@
       "required": true,
       "unique": true
     },
-    "recipes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::recipe.recipe",
-      "mappedBy": "author"
-    },
     "saved_recipes": {
       "type": "relation",
       "relation": "oneToMany",
@@ -98,6 +92,18 @@
     },
     "lastUsageDate": {
       "type": "date"
+    },
+    "recipes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::recipe.recipe",
+      "mappedBy": "author"
+    },
+    "pantry_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pantry-item.pantry-item",
+      "mappedBy": "owner"
     }
   }
 }
