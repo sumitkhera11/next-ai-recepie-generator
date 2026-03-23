@@ -8,6 +8,8 @@ import { Clock, Flame, Star, Sparkles } from "lucide-react";
 
 import { SITE_STATS, FEATURES, HOW_IT_WORKS_STEPS } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 /* ---------------- SEO METADATA ---------------- */
 
 export const metadata = {

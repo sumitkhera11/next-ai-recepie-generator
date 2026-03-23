@@ -10,6 +10,7 @@ import { getCategoryEmoji, getCountryFlag } from '@/lib/data';
 import { checkUserServer } from "@/lib/checkUserServer";
 import { slugify } from "@/lib/slugify"
 
+export const dynamic = "force-dynamic";
 const Dashboard = async () => {
   const user = await checkUserServer();
   if (!user) {

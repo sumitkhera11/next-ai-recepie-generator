@@ -4,6 +4,8 @@ import { ChefHat, Clock, Brain } from "lucide-react"
 import GenerateButton from "@/components/GenerateButton"
 import { checkUserServer } from "@/lib/checkUserServer"
 import { slugify } from "@/lib/slugify"
+
+export const dynamic = "force-dynamic";
 // GeneratePage (form)
 //     ↓
 // Server Action (generateRecipe)
