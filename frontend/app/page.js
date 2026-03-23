@@ -101,7 +101,7 @@ export default async function Home() {
 
           <div className="relative w-full max-w-md mx-auto aspect-[4/5] rounded-2xl overflow-hidden border-4 border-stone-900">
             <Image
-              src="/pasta-dish.webp"
+              src="/paneer-chilli.png"
               alt="AI generated pasta recipe from ingredients"
               fill
               priority
