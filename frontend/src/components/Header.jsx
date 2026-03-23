@@ -10,7 +10,9 @@ import { Badge } from "@/components/ui/Badge";
 import { usePathname } from "next/navigation";
 
 export default function Header({ userId }) {
+   
     const pathname = usePathname();
+
     return (
         <header className="fixed top-0 w-full border-b border-stone-200 
       bg-stone-50/80 backdrop-blur-md z-50 
