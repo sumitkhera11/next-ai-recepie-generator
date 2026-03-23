@@ -7,21 +7,29 @@ export async function checkUserServer() {
 
     try {
 
+      // const { userId } = auth();
+
+      //   if (!userId) {
+      //       console.log("❌ Clerk user not found");
+      //       // return null;
+      //   }
+      //   // 🔥 1. Get Clerk user
+      //   const clerkUser = await currentUser();
+
+      //   if (!clerkUser) {
+      //       console.log("❌ currentUser() returned null");
+      //       return null;
+      //   }
+
+      //   console.log("✅ Clerk user:", clerkUser);
       const { userId } = auth();
 
-        if (!userId) {
-            console.log("❌ Clerk user not found");
-            // return null;
-        }
-        // 🔥 1. Get Clerk user
-        const clerkUser = await currentUser();
+    if (!userId) {
+      console.log("❌ Clerk user not found");
+      return null;
+    }
 
-        if (!clerkUser) {
-            console.log("❌ currentUser() returned null");
-            return null;
-        }
-
-        console.log("✅ Clerk user:", clerkUser);
+    console.log("✅ USER ID:", userId);
 
         // 🔥 2. Extract details
         const email = clerkUser.emailAddresses?.[0]?.emailAddress;
