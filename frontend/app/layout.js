@@ -31,11 +31,12 @@ export default async function RootLayout({ children }) {
 
   return (
 
-    <ClerkProvider appearance={{ baseTheme: neobrutalism }}>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${inter.className}`}
-        >
+
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.className}`}
+      >
+        <ClerkProvider appearance={{ baseTheme: neobrutalism }}>
           <PantryModalProvider>
             <Header userId={userId} />
             <main className="min-h-screen">
@@ -118,8 +119,9 @@ export default async function RootLayout({ children }) {
 
             </footer>
           </PantryModalProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
+
   );
 }

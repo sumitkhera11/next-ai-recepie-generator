@@ -92,9 +92,8 @@ export default function Header({ userId }) {
                     </SignedOut>
 
                     <SignedIn>
-                        {userId && (
-                            <Badge
-                                className="hidden sm:inline-flex items-center
+                        <Badge
+                            className="hidden sm:inline-flex items-center
                  px-4 py-1.5
                  text-sm font-semibold
                  rounded-full
@@ -102,11 +101,11 @@ export default function Header({ userId }) {
                  bg-orange-50
                  text-orange-600!
                  backdrop-blur-sm"
-                            >
-                                <Sparkles className="h-4 w-4 mr-2 text-orange-500!" />
-                                Free Plan
-                            </Badge>
-                        )}
+                        >
+                            <Sparkles className="h-4 w-4 mr-2 text-orange-500!" />
+                            Free Plan
+                        </Badge>
+
                         <Link href="/generate">
                             <Button
                                 className="
