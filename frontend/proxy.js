@@ -1,3 +1,30 @@
+// import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+// const isProtectedRoute = createRouteMatcher([
+//   "/dashboard(.*)",
+//   "/recipe(.*)",
+//   "/recipes(.*)",
+//   "/pantry(.*)",
+// ]);
+
+// export default clerkMiddleware((auth, req) => {
+//   // if (isProtectedRoute(req)) {
+//   //   auth.protect();
+//   // }
+// });
+// // for development
+// export const config = {
+//   matcher: ["/(.*)"],
+// }
+
+// // for production
+// // export const config = {
+// //   matcher: [
+// //     "/((?!_next|.*\\..*).*)",
+// //     "/(api|trpc)(.*)",
+// //   ],
+// // };
+
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
@@ -8,19 +35,15 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
-  // if (isProtectedRoute(req)) {
-  //   auth.protect();
-  // }
+  if (isProtectedRoute(req)) {
+    auth.protect(); // ✅ FIXED (IMPORTANT)
+  }
 });
-// for development
-export const config = {
-  matcher: ["/(.*)"],
-}
 
-// for production
-// export const config = {
-//   matcher: [
-//     "/((?!_next|.*\\..*).*)",
-//     "/(api|trpc)(.*)",
-//   ],
-// };
+// ✅ Production + Dev both safe matcher
+export const config = {
+  matcher: [
+    "/((?!_next|.*\\..*).*)",
+    "/(api|trpc)(.*)",
+  ],
+};

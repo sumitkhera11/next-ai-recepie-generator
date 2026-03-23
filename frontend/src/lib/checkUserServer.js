@@ -1,16 +1,23 @@
 // lib/checkUserServer.js
 
-import { currentUser } from "@clerk/nextjs/server";
+import { auth,currentUser } from "@clerk/nextjs/server";
 import { syncUserWithStrapi, getStrapiJWT } from "./strapiAuth";
 
 export async function checkUserServer() {
 
     try {
+
+      const { userId } = auth();
+
+        if (!userId) {
+            console.log("❌ Clerk user not found");
+            // return null;
+        }
         // 🔥 1. Get Clerk user
         const clerkUser = await currentUser();
 
         if (!clerkUser) {
-            console.log("❌ Clerk user not found");
+            console.log("❌ currentUser() returned null");
             return null;
         }
 
