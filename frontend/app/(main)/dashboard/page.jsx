@@ -4,36 +4,34 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import Link from 'next/link'
 import Image from 'next/image'
-import { redirect } from "next/navigation"
 import React from 'react'
 import { getCategoryEmoji, getCountryFlag } from '@/lib/data';
-import { checkUserServer } from "@/lib/checkUserServer";
+import LogoutButton from "./LogoutButton";
 import { slugify } from "@/lib/slugify"
 
 export const dynamic = "force-dynamic";
 const Dashboard = async () => {
-  const user = await checkUserServer();
-  if (!user) {
-    redirect("/")
-  }
+  
+
   const recipeData = await getRecipeOfTheDay()
 
   const categoriesData = await getCategories()
   const areasData = await getAreas()
 
   const recipeOfTheDay = recipeData?.recipe;
-  console.log("RECIPE_OF_THE_DAY:", recipeOfTheDay)
 
 
   const categories = categoriesData?.categories || [];
   const areas = areasData?.areas || [];
   return (
+
     <div className='min-h-screen bg-stone-50 py-16 px-4'>
       <div className='max-w-6xl mx-auto'>
         <div className='mb-5'>
           <h1 className='text-5xl md:text-7xl font-bold text-stone-900 mb-4 tracking-tight leading-tight'>
             Daily & fresh Recipes  🔥
           </h1>
+
           <p className='text-xl text-stone-600 font-light max-w-2xl'>
             Discover thousands of recipes from the world, Cook, create and savor.
           </p>

@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
-import { checkUserServer } from "@/lib/checkUserServer"
 import { Clock, Flame, Star, Sparkles } from "lucide-react";
 
 import { SITE_STATS, FEATURES, HOW_IT_WORKS_STEPS } from "@/lib/data";
@@ -43,9 +42,6 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const user = await checkUserServer();
-
-  console.log("FINAL USER:", user);
   return (
     <main className="min-h-screen bg-stone-50 text-stone-900">
 

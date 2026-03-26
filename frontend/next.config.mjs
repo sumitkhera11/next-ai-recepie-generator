@@ -3,6 +3,9 @@ const nextConfig = {
   experimental: {
     serverComponentsHmrCache: false,
   },
+
+  turbopack: {}, // ✅ IMPORTANT (silence error)
+
   images: {
     remotePatterns: [
       {

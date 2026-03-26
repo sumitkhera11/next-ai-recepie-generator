@@ -1,5 +1,5 @@
 import { checkScanUsage, incrementScanUsage } from "@/actions/pantry.actions";
-import { checkUserServer } from "@/lib/checkUserServer";
+import { authGuardAPI  } from "@/lib/authGuardAPI";
 import { scanPantryImage } from "@/actions/pantry.actions";
 // Better flow:
 // Check limit
@@ -18,10 +18,10 @@ import { scanPantryImage } from "@/actions/pantry.actions";
 
 export async function POST(req) {
     try {
-        const user = await checkUserServer();
+        const user = await authGuardAPI();
 
-        if (!user) {
-            return Response.json({ error: "Unauthorized" }, { status: 401 });
+        if (user.error) {
+            return Response.json({ error: user.error }, { status: user.status });
         }
 
         // 1️⃣ Parse formData (NOT req.json for images)
@@ -72,7 +72,7 @@ export async function POST(req) {
         }
 
         // 3️⃣ Increment ONLY after success
-        await incrementScanUsage( usage.currentUsage);
+        await incrementScanUsage(usage.currentUsage);
 
         return Response.json({
             success: true,

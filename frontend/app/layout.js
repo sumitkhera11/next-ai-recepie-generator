@@ -2,13 +2,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Heart } from "lucide-react";
 import Header from "@/components/Header";
-import { auth } from "@clerk/nextjs/server";
-
-
-import { ClerkProvider } from "@clerk/nextjs"
-import { neobrutalism } from "@clerk/themes";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/Toaster";
 import { PantryModalProvider } from "@/context/PantryModalContext";
+import Providers from "@/components/Providers";
+
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
@@ -16,18 +13,9 @@ export const metadata = {
   title: "Serve - AI Recipes Platform",
   description: "Discover AI-generated recipes",
 };
-//server
 
-// Login (Clerk)   ↓
-// checkUserServer()
-// Find user by clerkId in Strapi
-// If not exists → create with default "free"
-// If exists → sync plan if changed
-// Return Strapi user
 
 export default async function RootLayout({ children }) {
-  const { userId } = auth();
-
 
   return (
 
@@ -36,9 +24,9 @@ export default async function RootLayout({ children }) {
       <body
         className={`${inter.className}`}
       >
-        <ClerkProvider appearance={{ baseTheme: neobrutalism }}>
+        <Providers>
           <PantryModalProvider>
-            <Header userId={userId} />
+            <Header/>
             <main className="min-h-screen">
               <Toaster richColors />
               {children}
@@ -119,7 +107,7 @@ export default async function RootLayout({ children }) {
 
             </footer>
           </PantryModalProvider>
-        </ClerkProvider>
+          </Providers>
       </body>
     </html>
 

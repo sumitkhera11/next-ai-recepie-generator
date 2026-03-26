@@ -1,49 +1,32 @@
-// import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
-// const isProtectedRoute = createRouteMatcher([
-//   "/dashboard(.*)",
-//   "/recipe(.*)",
-//   "/recipes(.*)",
-//   "/pantry(.*)",
-// ]);
+export async function proxy(req) {
+  const token = await getToken({ req });
 
-// export default clerkMiddleware((auth, req) => {
-//   // if (isProtectedRoute(req)) {
-//   //   auth.protect();
-//   // }
-// });
-// // for development
-// export const config = {
-//   matcher: ["/(.*)"],
-// }
+  const { pathname } = req.nextUrl;
 
-// // for production
-// // export const config = {
-// //   matcher: [
-// //     "/((?!_next|.*\\..*).*)",
-// //     "/(api|trpc)(.*)",
-// //   ],
-// // };
-
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/recipe(.*)",
-  "/recipes(.*)",
-  "/pantry(.*)",
-]);
-
-export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) {
-    auth.protect(); // ✅ FIXED (IMPORTANT)
+  // Public routes
+  if (
+    pathname === "/" ||
+    pathname.startsWith("/sign-in") ||
+    pathname.startsWith("/recipes")
+  ) {
+    return NextResponse.next();
   }
-});
 
-// ✅ Production + Dev both safe matcher
+  // Protected routes
+  if (!token) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+
+  return NextResponse.next();
+}
+
 export const config = {
   matcher: [
-    "/((?!_next|.*\\..*).*)",
-    "/(api|trpc)(.*)",
+    "/dashboard/:path*",
+    "/saved/:path*",
+    "/pantry/:path*",
   ],
 };

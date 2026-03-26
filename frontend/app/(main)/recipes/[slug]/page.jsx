@@ -1,7 +1,6 @@
 import RecipeUI from "@/components/RecipeUI";
 import { getRecipeBySlug } from "@/lib/strapi";
 import { notFound, redirect } from "next/navigation";
-import { checkUserServer } from "@/lib/checkUserServer"
 import {RecipeNotFound} from "@/components/ui/RecipeNotFound"
 
 function mapRecipe(strapiRecipe) {
@@ -20,8 +19,6 @@ function mapRecipe(strapiRecipe) {
 }
 
 export default async function RecipeDetailPage({ params }) {
-    const user = await checkUserServer();
-    if (!user) redirect("/sign-in");
 
     const { slug } = await params;
     if (!slug) {

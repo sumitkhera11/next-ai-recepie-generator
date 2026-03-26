@@ -1,3 +1,4 @@
+import { authGuardAPI } from "@/lib/authGuardAPI";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 export async function getRecipeBySlug(slug) {
@@ -72,9 +73,14 @@ export async function createRecipe(recipeData, jwt) {
 
     return created.data;
 }
-export async function getSavedRecipes(user) {
+export async function getSavedRecipes() {
+    const user = await authGuardAPI();
+
+    if (user.error) {
+        return [];
+    }
     try {
-        const url = `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&populate=recipe`;
+        const url = `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.session.user.id}&populate=recipe`;
 
 
         const res = await fetch(url, {

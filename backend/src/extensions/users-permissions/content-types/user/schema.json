@@ -66,11 +66,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "clerkId": {
-      "type": "string",
-      "required": true,
-      "unique": true
-    },
     "saved_recipes": {
       "type": "relation",
       "relation": "oneToMany",

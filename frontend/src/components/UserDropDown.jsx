@@ -1,8 +1,8 @@
 "use client";
 
-import {
-  UserButton,
-} from "@clerk/nextjs";
+// import {
+//   UserButton,
+// } from "@clerk/nextjs";
 import {Cookie,  Refrigerator} from "lucide-react";
 
 export default function UserDropDown() {

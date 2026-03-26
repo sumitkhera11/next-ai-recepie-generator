@@ -2,7 +2,6 @@ import { getOrGenerateRecipe } from "@/actions/recipe.actions"
 import { redirect } from "next/navigation"
 import { ChefHat, Clock, Brain } from "lucide-react"
 import GenerateButton from "@/components/GenerateButton"
-import { checkUserServer } from "@/lib/checkUserServer"
 import { slugify } from "@/lib/slugify"
 
 export const dynamic = "force-dynamic";
@@ -26,10 +25,6 @@ export const dynamic = "force-dynamic";
 // ----------------------
 async function generateRecipe(formData) {
     "use server"
-    const user = await checkUserServer();
-    console.log("GENERATE_RECIPE_CHECK_USER:", user)
-    if (!user) redirect("/");
-
     const rawInput = formData.get("slug")
 
     if (!rawInput) return
@@ -58,11 +53,6 @@ export const metadata = {
 }
 
 export default async function GeneratePage() {
-    const user = await checkUserServer();
-    console.log("GENERATE_PAGE_CHECK_USER_SERVER_RESULT:", user)
-    if (!user) {
-        redirect("/sign-in")
-    }
 
     return (
         <div className="min-h-screen bg-stone-50 px-4 pt-28 pb-20">

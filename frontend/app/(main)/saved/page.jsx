@@ -1,21 +1,21 @@
 import { removeRecipeFromCollection } from "@/actions/recipe.actions";
 
 import { getSavedRecipes } from "@/lib/strapi";
-import { checkUserServer } from "@/lib/checkUserServer";
-import { redirect } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { LIMITS } from "@/lib/constants/limits";
 import SavedRecipeCard from "@/components/SavedRecipeCard";
+import { requireUser } from "@/lib/authGuard";
+import { getUser } from "@/lib/getUserFromSession";
+import { Button } from "@/components/ui/Button";
 
 export const dynamic = "force-dynamic";
 
 
 export default async function SavedRecipesPage() {
-    const user = await checkUserServer();
-    if (!user) redirect("/sign-in");
+    const session = await requireUser();
+    const user = getUser(session);
 
-    const result = await getSavedRecipes(user);
+    const result = await getSavedRecipes();
 
     // ✅ HANDLE ERROR FIRST
     if (!result.success) {
@@ -98,11 +98,10 @@ export default async function SavedRecipesPage() {
                     <p className="text-gray-500 mb-4">
                         Start exploring and save your favorite recipes
                     </p>
-                    <Link
-                        href="/generate"
-                        className="px-6 py-3 bg-black text-white rounded-lg hover:opacity-90"
-                    >
-                        Generate Recipe
+                    <Link href="/generate">
+                        <Button variant="primary">
+                            Generate Recipe
+                        </Button>
                     </Link>
                 </div>
             ) : (
@@ -111,7 +110,7 @@ export default async function SavedRecipesPage() {
                         <SavedRecipeCard
                             key={item.id}
                             item={item}
-                            jwt={user.jwt} // ✅ IMPORTANT
+                            jwt={user.jwt}
                         />
                     ))}
                 </div>

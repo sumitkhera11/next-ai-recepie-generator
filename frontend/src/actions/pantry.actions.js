@@ -1,10 +1,9 @@
 "use server";
 import { GoogleGenAI } from "@google/genai";
-import { checkUserServer } from "@/lib/checkUserServer";
 import { revalidatePath } from "next/cache";
+import { authGuardAPI } from "@/lib/authGuardAPI";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 import { FREE_LIMIT } from "@/lib/constants/limits";
 
@@ -17,24 +16,23 @@ const apiKey = process.env.Dev_Gemini_key;
 if (!apiKey) {
     throw new Error("GEMINI_API_KEY missing");
 }
-
 const genAI = new GoogleGenAI({
     apiKey: apiKey
 });
 
 export async function checkScanUsage() {
 
-    const user = await checkUserServer();
-
-    if (!user) {
-        return { success: false, error: "Unauthorized" };
+    const user = await authGuardAPI();
+    if (user.error) {
+        return { success: false, error: user.error };
     }
+    console.log("USER OK:", user.id);
 
     const today = new Date().toLocaleDateString("en-CA");
 
-    const res = await fetch(`${STRAPI_URL}/users/${user.id}`, {
+    const res = await fetch(`${STRAPI_URL}/api/users/${user.id}`, {
         headers: {
-            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            Authorization: `Bearer ${user.jwt}`,
         },
     });
 
@@ -64,18 +62,18 @@ export async function checkScanUsage() {
 
 export async function incrementScanUsage(currentUsage) {
 
-    const user = await checkUserServer();
+    const user = await authGuardAPI();
 
-    if (!user) {
-        return { success: false, error: "Unauthorized" };
+    if (user.error) {
+        return { success: false, error: user.error }
     }
 
     const today = new Date().toLocaleDateString("en-CA");
 
-    await fetch(`${STRAPI_URL}/users/${user.id}`, {
+    await fetch(`${STRAPI_URL}/api/users/${user.id}`, {
         method: "PUT",
         headers: {
-            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            Authorization: `Bearer ${user.jwt}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -88,9 +86,10 @@ export async function incrementScanUsage(currentUsage) {
 }
 
 export async function scanPantryImage(formData) {
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" };
+    const user = await authGuardAPI();
+
+    if (user.error) {
+       return { success: false, error: user.error }
     }
 
     try {
@@ -185,12 +184,12 @@ Return ONLY the JSON array.
 }
 
 export async function saveToPantry(formData) {
-   
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
+
+    const user = await authGuardAPI();
+
+    if (user.error) {
+       return { success: false, error: user.error }
     }
-   
     try {
         const ingredientsJson = formData.get("ingredients");
         const ingredients = JSON.parse(ingredientsJson);
@@ -205,7 +204,7 @@ export async function saveToPantry(formData) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                    Authorization: `Bearer ${user.jwt}`,
                 },
                 body: JSON.stringify({
                     data: {
@@ -232,9 +231,10 @@ export async function saveToPantry(formData) {
     }
 }
 export async function addPantryItemsManually(formData) {
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
+    const user = await authGuardAPI();
+
+    if (user.error) {
+       return { success: false, error: user.error }
     }
     try {
         const name = formData.get("name");
@@ -249,7 +249,7 @@ export async function addPantryItemsManually(formData) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                Authorization: `Bearer ${user.jwt}`,
             },
             body: JSON.stringify({
                 data: {
@@ -285,22 +285,22 @@ export async function addPantryItemsManually(formData) {
 
 }
 export async function getPantryItems() {
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, items: [] };
-    }
+    const user = await authGuardAPI();
 
+    if (user.error) {
+        return { success: false, error: user.error }
+    }
     try {
         const response = await fetch(
             `${STRAPI_URL}/api/pantry-items?filters[owner][id][$eq]=${user.id}&sort=createdAt:desc`,
             {
                 headers: {
-                    Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                    Authorization: `Bearer ${user.jwt}`,
                 },
                 cache: "no-store" // caching
             }
         );
-        console.log("PANTRY_RESPONSE:",response)
+        console.log("PANTRY_RESPONSE:", response)
         if (!response.ok) {
             console.error("PANTRY FETCH FAILED");
 
@@ -324,15 +324,15 @@ export async function getPantryItems() {
 }
 
 export async function deletePantryItem(itemId) {
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
-    }
+    const user = await authGuardAPI();
 
+    if (user.error) {
+      return { success: false, error: user.error }
+    }
     const res = await fetch(`${STRAPI_URL}/api/pantry-items/${itemId}`, {
         method: "DELETE",
         headers: {
-            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            Authorization: `Bearer ${user.jwt}`,
         },
     });
 
@@ -343,11 +343,11 @@ export async function deletePantryItem(itemId) {
 }
 // Update pantry item
 export async function updatePantryItem(formData) {
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
-    }
+    const user = await authGuardAPI();
 
+    if (user.error) {
+     return { success: false, error: user.error }
+    }
     const itemId = formData.get("itemId");
     const name = formData.get("name");
     const quantity = formData.get("quantity");
@@ -356,7 +356,7 @@ export async function updatePantryItem(formData) {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+            Authorization: `Bearer ${user.jwt}`,
         },
         body: JSON.stringify({
             data: {

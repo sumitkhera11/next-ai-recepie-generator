@@ -1,13 +1,12 @@
 "use server";
-import { checkUserServer } from "@/lib/checkUserServer";
 import { generateRecipe } from "@/lib/ai/generateRecipe";
 import { fetchRecipeImage } from "@/lib/images/fetchRecipeImage";
 import { checkRecipeUsage, incrementRecipeUsage } from "@/actions/usage.actions";
 import { getRecipeBySlug, createRecipe } from "@/lib/strapi";
 import { slugify } from "@/lib/slugify";
+import { authGuardAPI } from "@/lib/authGuardAPI";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
-const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // 1. Check DB
 // 2. If exists → return
@@ -19,14 +18,11 @@ const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 // 6. Return recipe
 export async function getOrGenerateRecipe(slug) {
     try {
-        const user = await checkUserServer();
+        const user = await authGuardAPI();
 
-        if (!user) {
-            return { success: false, error: "Unauthorized" };
+        if (user.error) {
+          return { success: false, error: user.error }
         }
-
-        console.log("USER OK:", user.id);
-
 
         // ✅ VALIDATION
         if (!slug || typeof slug !== "string" || slug === "undefined") {
@@ -94,7 +90,7 @@ export async function getOrGenerateRecipe(slug) {
             if (!saved) {
                 return { success: false, error: "Strapi save failed (MealDB)" };
             }
-            await incrementRecipeUsage(user.id, 0);
+            await incrementRecipeUsage();
 
             return {
                 success: true,
@@ -105,7 +101,7 @@ export async function getOrGenerateRecipe(slug) {
 
 
         // 2. CHECK USAGE
-        const usage = await checkRecipeUsage(user.id);
+        const usage = await checkRecipeUsage();
         console.log("USAGE:", usage)
         if (!usage.allowed) {
             return {
@@ -410,10 +406,9 @@ function normalizeRecipe(aiRecipe, slug, userId, imageUrl) {
 // Dono protected endpoints hain.
 // Dono me token required hai.
 export async function saveRecipeToCollection(recipeId) {
-    const user = await checkUserServer();
-
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
+    const user = await authGuardAPI();
+    if (user.error) {
+       return { success: false, error: user.error }
     }
 
     try {
@@ -425,14 +420,15 @@ export async function saveRecipeToCollection(recipeId) {
         // Check if already saved
         // Check existing
         const existingResponse = await fetch(
-            `${STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.id}&filters[recipe][id][$eq]=${recipeId}&populate=*`,
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/saved-recipes?filters[user][id][$eq]=${user.session.user.id}&filters[recipe][id][$eq]=${recipeId}&populate=*`,
             {
                 headers: {
-                    Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                    Authorization: `Bearer ${user.jwt}`,
                 },
                 cache: "no-store",
             }
         );
+
         console.log("EXISTING_RESPONSE:", existingResponse)
         if (existingResponse.ok) {
             const existingData = await existingResponse.json();
@@ -449,12 +445,12 @@ export async function saveRecipeToCollection(recipeId) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+                Authorization: `Bearer ${user.jwt}`,
             },
             body: JSON.stringify({
                 data: {
                     savedat: new Date().toISOString(),
-                    user: user.id,
+                    user: user.session.user.id,
                     recipe: recipeId
                 }
             }),
@@ -479,12 +475,10 @@ export async function saveRecipeToCollection(recipeId) {
 
 // ` recipe from user's collection (unbookmark)
 export async function removeRecipeFromCollection(recipeId) {
-    console.log("RECIPE_ID_FROM_COLLECTION:", recipeId)
-    const user = await checkUserServer();
-    if (!user) {
-        return { success: false, error: "Unauthorized" }
+    const user = await authGuardAPI();
+    if (user.error) {
+      return { success: false, error: user.error }
     }
-
 
     try {
         if (!recipeId) {

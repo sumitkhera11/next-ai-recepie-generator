@@ -10,18 +10,11 @@ import { redirect } from "next/navigation"
 import Link from 'next/link';
 import { Badge } from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
-import { checkUserServer } from "@/lib/checkUserServer";
-
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Pantry() {
-    // ✅ Auth Check
-    const user = await checkUserServer();
-   if (!user) {
-    redirect("/sign-in");   
-  }
 
     // ✅ Fetch Items
     const pantryItems = await getPantryItems();
