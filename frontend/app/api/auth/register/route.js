@@ -1,3 +1,4 @@
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -12,7 +13,7 @@ export async function POST(req) {
     }
 
     // 🔥 call Strapi register API
-    const res = await fetch("http://localhost:1337/api/auth/local/register", {
+    const res = await fetch(`${STRAPI_URL}/api/auth/local/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
