@@ -11,7 +11,7 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
+    console.log("BEFORE_REGISTER API HIT ONLY");
     // 🔥 call Strapi register API
     const res = await fetch(`${STRAPI_URL}/api/auth/local/register`, {
       method: "POST",
@@ -24,6 +24,7 @@ export async function POST(req) {
         password,
       }),
     });
+    console.log("AFTER_REGISTER API HIT ONLY");
 
     const data = await res.json();
     console.log("REGISTER RESPONSE:", data);

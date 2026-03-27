@@ -17,7 +17,8 @@ if (!apiKey) {
     throw new Error("GEMINI_API_KEY missing");
 }
 const genAI = new GoogleGenAI({
-    apiKey: apiKey
+    apiKey: apiKey,
+    baseUrl: "https://generativelanguage.googleapis.com/v1beta"
 });
 
 export async function checkScanUsage() {

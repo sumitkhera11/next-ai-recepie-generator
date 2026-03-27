@@ -22,7 +22,8 @@ if (!apiKey) {
 }
 
 const ai = new GoogleGenAI({
-    apiKey: apiKey
+    apiKey: apiKey,
+    baseUrl: "https://generativelanguage.googleapis.com/v1beta"
 });
 // do not touch this code
 export async function generateRecipe(userPrompt) {
