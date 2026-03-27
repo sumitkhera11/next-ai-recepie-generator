@@ -1,3 +1,4 @@
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
@@ -14,7 +15,7 @@ export const authOptions = {
         console.log("📩 credentials:", credentials);
         //login to Strapi and get user + JWT
         try {
-          const res = await fetch("http://localhost:1337/api/auth/local", {
+          const res = await fetch(`${STRAPI_URL}/api/auth/local`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
