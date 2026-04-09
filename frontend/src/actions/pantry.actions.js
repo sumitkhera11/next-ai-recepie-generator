@@ -90,7 +90,7 @@ export async function scanPantryImage(formData) {
     const user = await authGuardAPI();
 
     if (user.error) {
-       return { success: false, error: user.error }
+        return { success: false, error: user.error }
     }
 
     try {
@@ -189,7 +189,7 @@ export async function saveToPantry(formData) {
     const user = await authGuardAPI();
 
     if (user.error) {
-       return { success: false, error: user.error }
+        return { success: false, error: user.error }
     }
     try {
         const ingredientsJson = formData.get("ingredients");
@@ -235,7 +235,7 @@ export async function addPantryItemsManually(formData) {
     const user = await authGuardAPI();
 
     if (user.error) {
-       return { success: false, error: user.error }
+        return { success: false, error: user.error }
     }
     try {
         const name = formData.get("name");
@@ -261,14 +261,15 @@ export async function addPantryItemsManually(formData) {
                 },
             }),
         });
+        console.log("PANTRY_RESPONSE:", response)
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error("Failed to add item:", errorText);;
-            throw new Error("Failed to add pantry item manually")
+            const errorData = await response.json();
+            console.error("❌ STRAPI ERROR:", JSON.stringify(errorData, null, 2));
+            throw new Error(errorData?.error?.message || "Failed to add pantry item");
         }
 
         const data = await response.json()
-        revalidatePath("/pantry");
+        revalidatePath("/pantry");  
 
         return {
             success: true,
@@ -328,7 +329,7 @@ export async function deletePantryItem(itemId) {
     const user = await authGuardAPI();
 
     if (user.error) {
-      return { success: false, error: user.error }
+        return { success: false, error: user.error }
     }
     const res = await fetch(`${STRAPI_URL}/api/pantry-items/${itemId}`, {
         method: "DELETE",
@@ -347,7 +348,7 @@ export async function updatePantryItem(formData) {
     const user = await authGuardAPI();
 
     if (user.error) {
-     return { success: false, error: user.error }
+        return { success: false, error: user.error }
     }
     const itemId = formData.get("itemId");
     const name = formData.get("name");

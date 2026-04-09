@@ -18,7 +18,7 @@ export default function SignInPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    fNEXT
     setLoading(true);
     setError("");
 
@@ -49,6 +49,12 @@ export default function SignInPage() {
         <p className="text-center text-stone-500 mb-6">
           Login to continue your recipe journey
         </p>
+        <button
+          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          className="w-full border py-3 rounded-lg font-semibold hover:bg-gray-100"
+        >
+          Continue with Google
+        </button>
 
         <form onSubmit={handleLogin} className="space-y-4">
 

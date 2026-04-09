@@ -1,8 +1,13 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL;
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -60,14 +65,31 @@ export const authOptions = {
 
   callbacks: {
 
-    async jwt({ token, user }) {
-      console.log("🪪 JWT CALLBACK:", { token, user });
+    async jwt({ token, user, account }) {
 
+      // ✅ GOOGLE LOGIN FLOW
+      if (account?.provider === "google") {
+        try {
+          const res = await fetch(`${STRAPI_URL}/api/auth/google/callback?access_token=${account.access_token}`);
+          const data = await res.json();
+
+          console.log("GOOGLE STRAPI RESPONSE:", data);
+
+          if (data.jwt) {
+            token.jwt = data.jwt;
+            token.id = data.user.id;
+            token.email = data.user.email;
+          }
+        } catch (err) {
+          console.error("Google Auth Error:", err);
+        }
+      }
+
+      // ✅ NORMAL LOGIN (credentials)
       if (user) {
-        token.jwt = user.jwt;//store Strapi JWT in token for later use
+        token.jwt = user.jwt;
         token.id = user.id;
         token.email = user.email;
-
       }
 
       return token;
