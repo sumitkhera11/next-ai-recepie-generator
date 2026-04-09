@@ -53,7 +53,8 @@ export default function SignInPage() {
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full border py-3 rounded-lg font-semibold hover:bg-gray-100"
         >
-          Continue with Google
+          <Image src="/google.svg" alt="Google" width={20} height={20} />
+          <span className="font-medium">Continue with Google</span>
         </button>
 
         <form onSubmit={handleLogin} className="space-y-4">
