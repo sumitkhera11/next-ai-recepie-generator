@@ -69,20 +69,37 @@ export const authOptions = {
 
       // ✅ GOOGLE LOGIN FLOW
       if (account?.provider === "google") {
+        // try {
+        //   console.log("🔥 GOOGLE LOGIN START");
+        //   const res = await fetch(`${STRAPI_URL}/api/connect/google/callback?access_token=${account.access_token}`);
+        //   const data = await res.json();
+
+        //   console.log("GOOGLE STRAPI RESPONSE:", data);
+
+        //   if (data.jwt) {
+        //     token.jwt = data.jwt;
+        //     token.id = data.user.id;
+        //     token.email = data.user.email;
+        //   }
+        // } catch (err) {
+        //   console.error("Google Auth Error:", err);
+        // }
+        const res = await fetch(
+          `${STRAPI_URL}/api/auth/google/callback?access_token=${account.access_token}`
+        );
+
+        // ❗ IMPORTANT: pehle text lo
+        const text = await res.text();
+
+        console.log("🔥 RAW STRAPI RESPONSE:", text);
+
+        let data;
+
         try {
-          console.log("🔥 GOOGLE LOGIN START");
-          const res = await fetch(`${STRAPI_URL}/api/connect/google/callback?access_token=${account.access_token}`);
-          const data = await res.json();
-
-          console.log("GOOGLE STRAPI RESPONSE:", data);
-
-          if (data.jwt) {
-            token.jwt = data.jwt;
-            token.id = data.user.id;
-            token.email = data.user.email;
-          }
+          data = JSON.parse(text);
         } catch (err) {
-          console.error("Google Auth Error:", err);
+          console.error("❌ NOT JSON RESPONSE");
+          return false;
         }
       }
 
