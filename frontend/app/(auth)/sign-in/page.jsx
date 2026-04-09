@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -51,12 +52,11 @@ export default function SignInPage() {
         </p>
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-          className="w-full border py-3 rounded-lg font-semibold hover:bg-gray-100"
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 py-3 rounded-lg font-medium hover:bg-gray-50 hover:border-gray-400 transition"
         >
           <Image src="/google.svg" alt="Google" width={20} height={20} />
-          <span className="font-medium">Continue with Google</span>
+          <span>Continue with Google</span>
         </button>
-
         <form onSubmit={handleLogin} className="space-y-4">
 
           {/* Email */}
