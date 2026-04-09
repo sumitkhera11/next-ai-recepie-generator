@@ -70,7 +70,8 @@ export const authOptions = {
       // ✅ GOOGLE LOGIN FLOW
       if (account?.provider === "google") {
         try {
-          const res = await fetch(`${STRAPI_URL}/api/auth/google/callback?access_token=${account.access_token}`);
+          console.log("🔥 GOOGLE LOGIN START");
+          const res = await fetch(`${STRAPI_URL}/api/connect/google/callback?access_token=${account.access_token}`);
           const data = await res.json();
 
           console.log("GOOGLE STRAPI RESPONSE:", data);
