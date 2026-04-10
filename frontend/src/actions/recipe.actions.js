@@ -23,7 +23,7 @@ export async function getOrGenerateRecipe(slug) {
         if (user.error) {
           return { success: false, error: user.error }
         }
-
+    
         // ✅ VALIDATION
         if (!slug || typeof slug !== "string" || slug === "undefined") {
             return { success: false, error: "Invalid recipe slug" };
@@ -192,13 +192,14 @@ export async function getOrGenerateRecipe(slug) {
             user.id,
             recipeImage
         );
-        console.log("FORMATTED_RECIPE:", formattedRecipe)
-        console.log("FINAL PAYLOAD:", JSON.stringify({ data: formattedRecipe }, null, 2));
+        // console.log("FORMATTED_RECIPE:", formattedRecipe)
+        // console.log("FINAL PAYLOAD:", JSON.stringify({ data: formattedRecipe }, null, 2));
 
 
         // =========================
         // 3. SAVE TO STRAPI
         // =========================
+        // console.log("USER_JWT:", user.jwt)
         const savedRecipe = await createRecipe(formattedRecipe, user.jwt);
         if (!savedRecipe) {
             return {
